@@ -6,5 +6,8 @@ package com.khotyn.valkyrie.exception;
  * Time: AM10:43
  * Dust to dust, earth to earth.
  */
-public class IllegalClassException {
+public class IllegalClassException extends Exception {
+    public IllegalClassException(String message) {
+        super(message);
+    }
 }

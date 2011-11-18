@@ -9,10 +9,10 @@ import java.util.List;
  */
 public class Clazz {
 
-    public static final String MAGIC_NUMBER = "0xCAFEBABE";
+    public static final String MAGIC_NUMBER = "CAFEBABE";
     private int                majorVersion;
     private int                minorVersion;
-    private List<CPInfo>       cpInfos;
+    private List<ConstantPoolInfo> constantPoolInfos;
     private List<AccessFlag>   accessFlags;
     private String             thisClass;
     private String             superClass;
@@ -37,12 +37,12 @@ public class Clazz {
         this.minorVersion = minorVersion;
     }
 
-    public List<CPInfo> getCpInfos() {
-        return cpInfos;
+    public List<ConstantPoolInfo> getConstantPoolInfos() {
+        return constantPoolInfos;
     }
 
-    public void setCpInfos(List<CPInfo> cpInfos) {
-        this.cpInfos = cpInfos;
+    public void setConstantPoolInfos(List<ConstantPoolInfo> constantPoolInfos) {
+        this.constantPoolInfos = constantPoolInfos;
     }
 
     public List<AccessFlag> getAccessFlags() {
@@ -103,5 +103,14 @@ public class Clazz {
 
     public static String getMagicNumber() {
         return MAGIC_NUMBER;
+    }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Magic Number:" + Clazz.MAGIC_NUMBER);
+        sb.append("\nMinor Version:" + this.minorVersion);
+        sb.append("\nMajor Version:" + this.majorVersion);
+
+        return sb.toString();
     }
 }

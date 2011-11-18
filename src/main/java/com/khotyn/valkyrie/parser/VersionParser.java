@@ -7,4 +7,11 @@ package com.khotyn.valkyrie.parser;
  * Dust to dust, earth to earth.
  */
 public class VersionParser {
+    public int getMajorVersion(byte[] byteCode) {
+        return 0;
+    }
+
+    public int getMinorVersion(byte[] byteCode) {
+        return 0;
+    }
 }
