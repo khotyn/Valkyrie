@@ -5,9 +5,9 @@ import java.util.List;
 /**
  * Representing the the java byte code
  * 
- * @author khotyn 2011-11-17 обнГ4:45:53
+ * @author khotyn 2011-11-17 О©╫О©╫О©╫О©╫4:45:53
  */
-public class Class {
+public class Clazz {
 
     public static final String MAGIC_NUMBER = "0xCAFEBABE";
     private int                majorVersion;
