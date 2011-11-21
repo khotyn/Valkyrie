@@ -9,4 +9,11 @@ import com.khotyn.valkyrie.ConstantPoolInfo;
  * Dust to dust, earth to earth.
  */
 public class ConstantLong extends ConstantPoolInfo {
+    public int tag = CONSTANT_LONG;
+
+    public long value;
+
+    public String toString() {
+        return "Constant Long{value: " + value + "}";
+    }
 }

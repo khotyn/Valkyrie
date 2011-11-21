@@ -112,7 +112,7 @@ public class Clazz {
         sb.append("Magic Number:" + Clazz.MAGIC_NUMBER);
         sb.append("\nMinor Version:" + this.minorVersion);
         sb.append("\nMajor Version:" + this.majorVersion);
-        sb.append("\nConstant Pool:" + constantPoolInfos);
+        sb.append("\nConstant Pool(Size:" + constantPoolInfos.size() + "):" + constantPoolInfos);
         return sb.toString();
     }
 }

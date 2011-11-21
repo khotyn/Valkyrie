@@ -69,6 +69,30 @@ public class ClassParser {
                     constantUTF8.content = ValkyrieUtil.hexStringToASCIIString(byteString.substring(cursor, cursor += utf8Length * 2));
                     constantPoolInfoes.add(constantUTF8);
                     break;
+                case ConstantPoolInfo.CONSTANT_INTEGER:
+                    ConstantInteger constantInteger = new ConstantInteger();
+                    constantInteger.value = Integer.parseInt(byteString.substring(cursor, cursor += 8), 16);
+                    constantPoolInfoes.add(constantInteger);
+                    break;
+                case ConstantPoolInfo.CONSTANT_FLOAT:
+                    ConstantFloat constantFloat = new ConstantFloat();
+                    int bits = Integer.parseInt(byteString.substring(cursor, cursor += 8), 16);
+
+                    int s = ((bits >> 31) == 0) ? 1 : -1;
+                    int e = (bits >> 23) & 0xff;
+                    int m = (e == 0) ? (bits & 0x7fffff) << 1 : (bits & 0x7fffff) | 0x800000;
+                    constantFloat.value = s * m * (float)Math.pow(2.0, e -150);
+                    constantPoolInfoes.add(constantFloat);
+                    break;
+                case ConstantPoolInfo.CONSTANT_LONG:
+                    ConstantLong constantLong = new ConstantLong();
+                    constantPoolInfoes.add(constantLong);
+                    break;
+                case ConstantPoolInfo.CONSTANT_DOUBLE:
+                    ConstantDouble constantDouble = new ConstantDouble();
+                    constantPoolInfoes.add(constantDouble);
+                    break;
+                // TODO: Add parse code
                 case ConstantPoolInfo.CONSTANT_CLASS:
                     ConstantClass constantClass = new ConstantClass();
                     constantClass.nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += 4), 16);
@@ -97,6 +121,20 @@ public class ClassParser {
                     nameAndType.descriptorIndex = Integer.parseInt(byteString.substring(cursor, cursor += 4), 16);
                     constantPoolInfoes.add(nameAndType);
                     break;
+                // TODO: Add parse code
+                case ConstantPoolInfo.CONSTANT_METHOD_HANDLE:
+                    ConstantMethodHandle constantMethodHandle = new ConstantMethodHandle();
+                    constantPoolInfoes.add(constantMethodHandle);
+                    break;
+                case ConstantPoolInfo.CONSTANT_METHOD_TYPE:
+                    ConstantMethodType constantMethodType = new ConstantMethodType();
+                    constantPoolInfoes.add(constantMethodType);
+                    break;
+                case ConstantPoolInfo.CONSTANT_INVOKE_DYNAMIC:
+                    ConstantInvokeDynamic constantInvokeDynamic = new ConstantInvokeDynamic();
+                    constantPoolInfoes.add(constantInvokeDynamic);
+                    break;
+                // TODO: Add parse code
                 default:
                     break;
             }

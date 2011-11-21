@@ -10,4 +10,10 @@ import com.khotyn.valkyrie.ConstantPoolInfo;
  */
 public class ConstantMethodType extends ConstantPoolInfo {
     public int tag = CONSTANT_METHOD_TYPE;
+
+    public int descriptorIndex;
+
+    public String toString() {
+        return "Constant Method Type{DescriptorIndex:" + descriptorIndex + "}";
+    }
 }
