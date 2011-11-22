@@ -8,6 +8,7 @@ import com.khotyn.valkyrie.BytecodeBehavior;
 import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.ConstantPoolInfo;
 import com.khotyn.valkyrie.Field;
+import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.constant.ConstantClass;
 import com.khotyn.valkyrie.constant.ConstantDouble;
 import com.khotyn.valkyrie.constant.ConstantFieldRef;
@@ -66,6 +67,7 @@ public class ClassParser {
         clazz.setThisClass(parseThisClass(byteString));
         clazz.setSuperClass(parseSuperClass(byteString));
         clazz.setInterfaces(parseInterfaces(byteString));
+        clazz.setFields(parseFields(byteString));
         return clazz;
     }
 
@@ -77,111 +79,98 @@ public class ClassParser {
             int tag = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U1), 16);
 
             switch (tag) {
-                case ConstantPoolInfo.CONSTANT_UTF8:
-                    ConstantUTF8 constantUTF8 = new ConstantUTF8();
-                    int utf8Length = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    constantUTF8.content = ValkyrieUtil.hexStringToASCIIString(byteString.substring(cursor,
-                                                                                                    cursor += utf8Length * 2));
-                    constantPoolInfoes.add(constantUTF8);
-                    break;
-                case ConstantPoolInfo.CONSTANT_INTEGER:
-                    ConstantInteger constantInteger = new ConstantInteger();
-                    constantInteger.value = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
-                    constantPoolInfoes.add(constantInteger);
-                    break;
-                case ConstantPoolInfo.CONSTANT_FLOAT:
-                    ConstantFloat constantFloat = new ConstantFloat();
-                    int bits = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
-                    int s = ((bits >> 31) == 0) ? 1 : -1;
-                    int e = (bits >> 23) & 0xff;
-                    int m = (e == 0) ? (bits & 0x7fffff) << 1 : (bits & 0x7fffff) | 0x800000;
-                    constantFloat.value = s * m * (float) Math.pow(2.0, e - 150);
-                    constantPoolInfoes.add(constantFloat);
-                    break;
-                case ConstantPoolInfo.CONSTANT_LONG:
-                    ConstantLong constantLong = new ConstantLong();
-                    constantLong.value = Long.parseLong(byteString.substring(cursor, cursor += (Clazz.U4 * 2)), 16);
-                    constantPoolInfoes.add(constantLong);
-                    constantPoolInfoes.add(null);
-                    i++;
-                    break;
-                case ConstantPoolInfo.CONSTANT_DOUBLE:
-                    ConstantDouble constantDouble = new ConstantDouble();
-                    long lbits = Long.parseLong(byteString.substring(cursor, cursor += (Clazz.U4 * 2)), 16);
-                    int ls = ((lbits >> 63) == 0) ? 1 : -1;
-                    int le = (int) ((lbits >> 52) & 0x7ffL);
-                    long lm = (le == 0) ? (lbits & 0xfffffffffffffL) << 1 : (lbits & 0xfffffffffffffL) | 0x10000000000000L;
-                    constantDouble.value = ls * lm * Math.pow(2.0, le - 1075);
-                    constantPoolInfoes.add(constantDouble);
-                    constantPoolInfoes.add(null);
-                    i++;
-                    break;
-                case ConstantPoolInfo.CONSTANT_CLASS:
-                    ConstantClass constantClass = new ConstantClass();
-                    constantClass.nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    constantPoolInfoes.add(constantClass);
-                    break;
-                case ConstantPoolInfo.CONSTANT_STRING:
-                    ConstantString string = new ConstantString();
-                    string.stringIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    constantPoolInfoes.add(string);
-                    break;
-                case ConstantPoolInfo.CONSTANT_FIELD_REF:
-                    ConstantFieldRef fieldRef = new ConstantFieldRef();
-                    fieldRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    fieldRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    constantPoolInfoes.add(fieldRef);
-                    break;
-                case ConstantPoolInfo.CONSTANT_METHOD_REF:
-                    ConstantMethodRef methodRef = new ConstantMethodRef();
-                    methodRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    methodRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    constantPoolInfoes.add(methodRef);
-                    break;
-                case ConstantPoolInfo.CONSTANT_INTERFACE_METHOD_REF:
-                    ConstantInterfaceMethodRef constantInterfaceMethodRef = new ConstantInterfaceMethodRef();
-                    constantInterfaceMethodRef.classIndex = Integer.parseInt(byteString.substring(cursor,
-                                                                                                  cursor += Clazz.U2),
-                                                                             16);
-                    constantInterfaceMethodRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor,
-                                                                                                        cursor += Clazz.U2),
-                                                                                   16);
-                    constantPoolInfoes.add(constantInterfaceMethodRef);
-                    break;
-                case ConstantPoolInfo.CONSTANT_NAME_AND_TYPE:
-                    ConstantNameAndType nameAndType = new ConstantNameAndType();
-                    nameAndType.nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    nameAndType.descriptorIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                    constantPoolInfoes.add(nameAndType);
-                    break;
-                case ConstantPoolInfo.CONSTANT_METHOD_HANDLE:
-                    ConstantMethodHandle constantMethodHandle = new ConstantMethodHandle();
-                    constantMethodHandle.referenceKind = BytecodeBehavior.getInstance(Integer.parseInt(byteString.substring(cursor,
-                                                                                                                            cursor += Clazz.U1),
-                                                                                                       16));
-                    constantMethodHandle.referenceIndex = Integer.parseInt(byteString.substring(cursor,
-                                                                                                cursor += Clazz.U2), 16);
-                    ;
-                    constantPoolInfoes.add(constantMethodHandle);
-                    break;
-                case ConstantPoolInfo.CONSTANT_METHOD_TYPE:
-                    ConstantMethodType constantMethodType = new ConstantMethodType();
-                    constantMethodType.descriptorIndex = Integer.parseInt(byteString.substring(cursor,
-                                                                                               cursor += Clazz.U2), 16);
-                    constantPoolInfoes.add(constantMethodType);
-                    break;
-                case ConstantPoolInfo.CONSTANT_INVOKE_DYNAMIC:
-                    ConstantInvokeDynamic constantInvokeDynamic = new ConstantInvokeDynamic();
-                    constantInvokeDynamic.bootstrapMethodAttrIndex = Integer.parseInt(byteString.substring(cursor,
-                                                                                                           cursor += Clazz.U2),
-                                                                                      16);
-                    constantInvokeDynamic.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor,
-                                                                                                   cursor += Clazz.U2),
-                                                                              16);
-                    constantPoolInfoes.add(constantInvokeDynamic);
-                    break;
-                default:
-                    break;
+            case ConstantPoolInfo.CONSTANT_UTF8:
+                ConstantUTF8 constantUTF8 = new ConstantUTF8();
+                int utf8Length = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantUTF8.content = ValkyrieUtil.hexStringToASCIIString(byteString.substring(cursor, cursor += utf8Length * 2));
+                constantPoolInfoes.add(constantUTF8);
+                break;
+            case ConstantPoolInfo.CONSTANT_INTEGER:
+                ConstantInteger constantInteger = new ConstantInteger();
+                constantInteger.value = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
+                constantPoolInfoes.add(constantInteger);
+                break;
+            case ConstantPoolInfo.CONSTANT_FLOAT:
+                ConstantFloat constantFloat = new ConstantFloat();
+                int bits = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
+                int s = ((bits >> 31) == 0) ? 1 : -1;
+                int e = (bits >> 23) & 0xff;
+                int m = (e == 0) ? (bits & 0x7fffff) << 1 : (bits & 0x7fffff) | 0x800000;
+                constantFloat.value = s * m * (float) Math.pow(2.0, e - 150);
+                constantPoolInfoes.add(constantFloat);
+                break;
+            case ConstantPoolInfo.CONSTANT_LONG:
+                ConstantLong constantLong = new ConstantLong();
+                constantLong.value = Long.parseLong(byteString.substring(cursor, cursor += (Clazz.U4 * 2)), 16);
+                constantPoolInfoes.add(constantLong);
+                constantPoolInfoes.add(null);
+                i++;
+                break;
+            case ConstantPoolInfo.CONSTANT_DOUBLE:
+                ConstantDouble constantDouble = new ConstantDouble();
+                long lbits = Long.parseLong(byteString.substring(cursor, cursor += (Clazz.U4 * 2)), 16);
+                int ls = ((lbits >> 63) == 0) ? 1 : -1;
+                int le = (int) ((lbits >> 52) & 0x7ffL);
+                long lm = (le == 0) ? (lbits & 0xfffffffffffffL) << 1 : (lbits & 0xfffffffffffffL) | 0x10000000000000L;
+                constantDouble.value = ls * lm * Math.pow(2.0, le - 1075);
+                constantPoolInfoes.add(constantDouble);
+                constantPoolInfoes.add(null);
+                i++;
+                break;
+            case ConstantPoolInfo.CONSTANT_CLASS:
+                ConstantClass constantClass = new ConstantClass();
+                constantClass.nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(constantClass);
+                break;
+            case ConstantPoolInfo.CONSTANT_STRING:
+                ConstantString string = new ConstantString();
+                string.stringIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(string);
+                break;
+            case ConstantPoolInfo.CONSTANT_FIELD_REF:
+                ConstantFieldRef fieldRef = new ConstantFieldRef();
+                fieldRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                fieldRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(fieldRef);
+                break;
+            case ConstantPoolInfo.CONSTANT_METHOD_REF:
+                ConstantMethodRef methodRef = new ConstantMethodRef();
+                methodRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                methodRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(methodRef);
+                break;
+            case ConstantPoolInfo.CONSTANT_INTERFACE_METHOD_REF:
+                ConstantInterfaceMethodRef constantInterfaceMethodRef = new ConstantInterfaceMethodRef();
+                constantInterfaceMethodRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantInterfaceMethodRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(constantInterfaceMethodRef);
+                break;
+            case ConstantPoolInfo.CONSTANT_NAME_AND_TYPE:
+                ConstantNameAndType nameAndType = new ConstantNameAndType();
+                nameAndType.nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                nameAndType.descriptorIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(nameAndType);
+                break;
+            case ConstantPoolInfo.CONSTANT_METHOD_HANDLE:
+                ConstantMethodHandle constantMethodHandle = new ConstantMethodHandle();
+                constantMethodHandle.referenceKind = BytecodeBehavior.getInstance(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U1),
+                        16));
+                constantMethodHandle.referenceIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(constantMethodHandle);
+                break;
+            case ConstantPoolInfo.CONSTANT_METHOD_TYPE:
+                ConstantMethodType constantMethodType = new ConstantMethodType();
+                constantMethodType.descriptorIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(constantMethodType);
+                break;
+            case ConstantPoolInfo.CONSTANT_INVOKE_DYNAMIC:
+                ConstantInvokeDynamic constantInvokeDynamic = new ConstantInvokeDynamic();
+                constantInvokeDynamic.bootstrapMethodAttrIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantInvokeDynamic.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantPoolInfoes.add(constantInvokeDynamic);
+                break;
+            default:
+                break;
             }
         }
 
@@ -229,11 +218,22 @@ public class ClassParser {
             field.setAccessFlags(parseAccessFlags(byteString));
             field.setNameIndex(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
             field.setDescriptorIndex(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
-            
-          //  int attributesCount
+
+            int attributesCount = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+            List<Attribute> attributes = new ArrayList<Attribute>(attributesCount);
+
+            for (int j = 0; j < attributesCount; j++) {
+                attributes.add(parseAttribute(byteString));
+            }
+
+            field.setAttributes(attributes);
         }
 
         return fields;
+    }
+
+    private Attribute parseAttribute(String byteString) {
+        return new Attribute();
     }
 
     private boolean validate(String byteString) {

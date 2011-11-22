@@ -18,7 +18,7 @@ public class ClazzTest {
     public void testReadClass() {
         ClassParser classParser = ClassParser.getInstance();
         try {
-            Clazz clazz = classParser.parse(FileUtils.readFileToByteArray(new File("/home/khotyn/Desktop/Main.class")));
+            Clazz clazz = classParser.parse(FileUtils.readFileToByteArray(new File("/Users/apple/Desktop/Main.class")));
             System.out.println(clazz.toString());
         } catch (IOException e) {
             e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.

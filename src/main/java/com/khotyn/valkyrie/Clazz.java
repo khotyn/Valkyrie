@@ -3,6 +3,8 @@ package com.khotyn.valkyrie;
 import java.util.Arrays;
 import java.util.List;
 
+import com.khotyn.valkyrie.attribute.Attribute;
+
 /**
  * Representing the the java byte code
  * 
@@ -21,9 +23,18 @@ public class Clazz {
     private int                    thisClass;
     private int                    superClass;
     private List<Integer>          interfaces;
-    private List<Integer>          fields;
-    private List<Method>           methods;
-    private List<Attribute>        attributes;
+    private List<Field>            fields;
+
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
+    }
+
+    private List<Method>    methods;
+    private List<Attribute> attributes;
 
     public int getMajorVersion() {
         return majorVersion;
@@ -99,14 +110,6 @@ public class Clazz {
 
     public void setInterfaces(List<Integer> interfaces) {
         this.interfaces = interfaces;
-    }
-
-    public List<Integer> getFields() {
-        return fields;
-    }
-
-    public void setFields(List<Integer> fields) {
-        this.fields = fields;
     }
 
     public String toString() {

@@ -2,12 +2,13 @@ package com.khotyn.valkyrie;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.attribute.Attribute;
+
 public class Field {
 
     private List<AccessFlag> accessFlags;
     private int              nameIndex;
     private int              descriptorIndex;
-    private int              attributesCount;
     private List<Attribute>  attributes;
 
     public int getNameIndex() {
@@ -24,14 +25,6 @@ public class Field {
 
     public void setDescriptorIndex(int descriptorIndex) {
         this.descriptorIndex = descriptorIndex;
-    }
-
-    public int getAttributesCount() {
-        return attributesCount;
-    }
-
-    public void setAttributesCount(int attributesCount) {
-        this.attributesCount = attributesCount;
     }
 
     public List<Attribute> getAttributes() {
