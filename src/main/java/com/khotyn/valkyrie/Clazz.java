@@ -18,10 +18,10 @@ public class Clazz {
     private int                    minorVersion;
     private List<ConstantPoolInfo> constantPoolInfos;
     private List<AccessFlag>       accessFlags;
-    private String                 thisClass;
-    private String                 superClass;
-    private List<String>           interfaces;
-    private List<String>           fields;
+    private int                    thisClass;
+    private int                    superClass;
+    private List<Integer>          interfaces;
+    private List<Integer>          fields;
     private List<Method>           methods;
     private List<Attribute>        attributes;
 
@@ -57,38 +57,6 @@ public class Clazz {
         this.accessFlags = accessFlags;
     }
 
-    public String getThisClass() {
-        return thisClass;
-    }
-
-    public void setThisClass(String thisClass) {
-        this.thisClass = thisClass;
-    }
-
-    public String getSuperClass() {
-        return superClass;
-    }
-
-    public void setSuperClass(String superClass) {
-        this.superClass = superClass;
-    }
-
-    public List<String> getInterfaces() {
-        return interfaces;
-    }
-
-    public void setInterfaces(List<String> interfaces) {
-        this.interfaces = interfaces;
-    }
-
-    public List<String> getFields() {
-        return fields;
-    }
-
-    public void setFields(List<String> fields) {
-        this.fields = fields;
-    }
-
     public List<Method> getMethods() {
         return methods;
     }
@@ -109,6 +77,38 @@ public class Clazz {
         return MAGIC_NUMBER;
     }
 
+    public int getThisClass() {
+        return thisClass;
+    }
+
+    public void setThisClass(int thisClass) {
+        this.thisClass = thisClass;
+    }
+
+    public int getSuperClass() {
+        return superClass;
+    }
+
+    public void setSuperClass(int superClass) {
+        this.superClass = superClass;
+    }
+
+    public List<Integer> getInterfaces() {
+        return interfaces;
+    }
+
+    public void setInterfaces(List<Integer> interfaces) {
+        this.interfaces = interfaces;
+    }
+
+    public List<Integer> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<Integer> fields) {
+        this.fields = fields;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Magic Number:" + Clazz.MAGIC_NUMBER);
@@ -116,6 +116,8 @@ public class Clazz {
         sb.append("\nMajor Version:" + this.majorVersion);
         sb.append("\nConstant Pool(Size:" + constantPoolInfos.size() + "):" + constantPoolInfos);
         sb.append("\nAccess Flags:" + Arrays.toString(accessFlags.toArray()));
+        sb.append("\nThis Class(#" + thisClass + "):" + constantPoolInfos.get(thisClass - 1));
+        sb.append("\nSuper Class(#" + superClass + "):" + constantPoolInfos.get(superClass - 1));
         return sb.toString();
     }
 }

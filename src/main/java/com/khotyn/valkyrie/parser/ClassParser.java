@@ -7,6 +7,7 @@ import com.khotyn.valkyrie.AccessFlag;
 import com.khotyn.valkyrie.BytecodeBehavior;
 import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.ConstantPoolInfo;
+import com.khotyn.valkyrie.Field;
 import com.khotyn.valkyrie.constant.ConstantClass;
 import com.khotyn.valkyrie.constant.ConstantDouble;
 import com.khotyn.valkyrie.constant.ConstantFieldRef;
@@ -57,18 +58,18 @@ public class ClassParser {
             throw new IllegalClassException("Invalid Magic Number");
         }
 
-        parseVersion(clazz, byteString);
-        parseConstantPool(clazz, byteString);
-        parseAccessFlags(clazz, byteString);
+        clazz.setMinorVersion(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+        clazz.setMajorVersion(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+
+        clazz.setConstantPoolInfos(parseConstantPool(byteString));
+        clazz.setAccessFlags(parseAccessFlags(byteString));
+        clazz.setThisClass(parseThisClass(byteString));
+        clazz.setSuperClass(parseSuperClass(byteString));
+        clazz.setInterfaces(parseInterfaces(byteString));
         return clazz;
     }
 
-    private void parseVersion(Clazz clazz, String byteString) {
-        clazz.setMinorVersion(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
-        clazz.setMajorVersion(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
-    }
-
-    private void parseConstantPool(Clazz clazz, String byteString) {
+    private List<ConstantPoolInfo> parseConstantPool(String byteString) {
         int constantPoolSize = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16) - 1;
         List<ConstantPoolInfo> constantPoolInfoes = new ArrayList<ConstantPoolInfo>(constantPoolSize);
 
@@ -184,20 +185,55 @@ public class ClassParser {
             }
         }
 
-        clazz.setConstantPoolInfos(constantPoolInfoes);
+        return constantPoolInfoes;
     }
 
-    private void parseAccessFlags(Clazz clazz, String byteString) {
+    private List<AccessFlag> parseAccessFlags(String byteString) {
         List<AccessFlag> accFlags = new ArrayList<AccessFlag>();
         int accessFlags = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-        System.out.println(accessFlags);
+
         for (AccessFlag accFlag : AccessFlag.values()) {
             if ((accessFlags & accFlag.flag) == accFlag.flag) {
                 accFlags.add(accFlag);
             }
         }
 
-        clazz.setAccessFlags(accFlags);
+        return accFlags;
+    }
+
+    private int parseThisClass(String byteString) {
+        return Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+    }
+
+    private int parseSuperClass(String byteString) {
+        return Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+    }
+
+    private List<Integer> parseInterfaces(String byteString) {
+        int size = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+        List<Integer> interfaces = new ArrayList<Integer>(size);
+
+        for (int i = 0; i < size; i++) {
+            interfaces.add(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+        }
+
+        return interfaces;
+    }
+
+    private List<Field> parseFields(String byteString) {
+        int size = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+        List<Field> fields = new ArrayList<Field>();
+
+        for (int i = 0; i < size; i++) {
+            Field field = new Field();
+            field.setAccessFlags(parseAccessFlags(byteString));
+            field.setNameIndex(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+            field.setDescriptorIndex(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+            
+          //  int attributesCount
+        }
+
+        return fields;
     }
 
     private boolean validate(String byteString) {
