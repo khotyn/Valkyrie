@@ -1,27 +1,29 @@
 package com.khotyn.valkyrie;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Representing the the java byte code
- *
+ * 
  * @author khotyn 2011-11-17 ����4:45:53
  */
 public class Clazz {
 
-    public static final String MAGIC_NUMBER = "CAFEBABE";
-    private int majorVersion;
-    private int minorVersion;
+    public static final int        U1           = 2;
+    public static final int        U2           = U1 * 2;
+    public static final int        U4           = U2 * 2;
+    public static final String     MAGIC_NUMBER = "CAFEBABE";
+    private int                    majorVersion;
+    private int                    minorVersion;
     private List<ConstantPoolInfo> constantPoolInfos;
-    private List<AccessFlag> accessFlags;
-    private String thisClass;
-    private String superClass;
-    private List<String> interfaces;
-    private List<String> fields;
-    private List<Method> methods;
-    private List<Attribute> attributes;
+    private List<AccessFlag>       accessFlags;
+    private String                 thisClass;
+    private String                 superClass;
+    private List<String>           interfaces;
+    private List<String>           fields;
+    private List<Method>           methods;
+    private List<Attribute>        attributes;
 
     public int getMajorVersion() {
         return majorVersion;
@@ -113,6 +115,7 @@ public class Clazz {
         sb.append("\nMinor Version:" + this.minorVersion);
         sb.append("\nMajor Version:" + this.majorVersion);
         sb.append("\nConstant Pool(Size:" + constantPoolInfos.size() + "):" + constantPoolInfos);
+        sb.append("\nAccess Flags:" + Arrays.toString(accessFlags.toArray()));
         return sb.toString();
     }
 }
