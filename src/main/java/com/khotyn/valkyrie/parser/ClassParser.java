@@ -3,7 +3,7 @@ package com.khotyn.valkyrie.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.khotyn.valkyrie.AccessFlag;
+import com.khotyn.valkyrie.AccessFlags;
 import com.khotyn.valkyrie.BytecodeBehavior;
 import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.ConstantPoolInfo;
@@ -177,11 +177,11 @@ public class ClassParser {
         return constantPoolInfoes;
     }
 
-    private List<AccessFlag> parseAccessFlags(String byteString) {
-        List<AccessFlag> accFlags = new ArrayList<AccessFlag>();
+    private List<AccessFlags> parseAccessFlags(String byteString) {
+        List<AccessFlags> accFlags = new ArrayList<AccessFlags>();
         int accessFlags = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
 
-        for (AccessFlag accFlag : AccessFlag.values()) {
+        for (AccessFlags accFlag : AccessFlags.values()) {
             if ((accessFlags & accFlag.flag) == accFlag.flag) {
                 accFlags.add(accFlag);
             }

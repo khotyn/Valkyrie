@@ -12,7 +12,7 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
-import com.khotyn.valkyrie.AccessFlag;
+import com.khotyn.valkyrie.AccessFlags;
 
 /**
  * Representing the information of inner class.
@@ -24,7 +24,7 @@ public class InnerClass {
     private int              innerClassInfo;
     private int              outerClassInfo;
     private int              innerName;
-    private List<AccessFlag> innerClassAccessFlags;
+    private List<AccessFlags> innerClassAccessFlags;
 
     public int getInnerClassInfo() {
         return innerClassInfo;
@@ -50,11 +50,11 @@ public class InnerClass {
         this.innerName = innerName;
     }
 
-    public List<AccessFlag> getInnerClassAccessFlags() {
+    public List<AccessFlags> getInnerClassAccessFlags() {
         return innerClassAccessFlags;
     }
 
-    public void setInnerClassAccessFlags(List<AccessFlag> innerClassAccessFlags) {
+    public void setInnerClassAccessFlags(List<AccessFlags> innerClassAccessFlags) {
         this.innerClassAccessFlags = innerClassAccessFlags;
     }
 }

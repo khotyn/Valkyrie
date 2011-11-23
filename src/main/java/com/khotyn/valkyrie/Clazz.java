@@ -19,7 +19,7 @@ public class Clazz {
     private int                    majorVersion;
     private int                    minorVersion;
     private List<ConstantPoolInfo> constantPoolInfos;
-    private List<AccessFlag>       accessFlags;
+    private List<AccessFlags>       accessFlags;
     private int                    thisClass;
     private int                    superClass;
     private List<Integer>          interfaces;
@@ -60,11 +60,11 @@ public class Clazz {
         this.constantPoolInfos = constantPoolInfos;
     }
 
-    public List<AccessFlag> getAccessFlags() {
+    public List<AccessFlags> getAccessFlags() {
         return accessFlags;
     }
 
-    public void setAccessFlags(List<AccessFlag> accessFlags) {
+    public void setAccessFlags(List<AccessFlags> accessFlags) {
         this.accessFlags = accessFlags;
     }
 

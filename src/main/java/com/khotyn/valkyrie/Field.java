@@ -6,7 +6,7 @@ import com.khotyn.valkyrie.attribute.Attribute;
 
 public class Field {
 
-    private List<AccessFlag> accessFlags;
+    private List<AccessFlags> accessFlags;
     private int              nameIndex;
     private int              descriptorIndex;
     private List<Attribute>  attributes;
@@ -35,11 +35,11 @@ public class Field {
         this.attributes = attributes;
     }
 
-    public List<AccessFlag> getAccessFlags() {
+    public List<AccessFlags> getAccessFlags() {
         return accessFlags;
     }
 
-    public void setAccessFlags(List<AccessFlag> accessFlags) {
+    public void setAccessFlags(List<AccessFlags> accessFlags) {
         this.accessFlags = accessFlags;
     }
 }
