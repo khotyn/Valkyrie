@@ -1,43 +1,69 @@
 package com.khotyn.valkyrie.attribute;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.khotyn.valkyrie.attribute.parser.AttributeParser;
+import com.khotyn.valkyrie.attribute.parser.SourceFileParser;
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * Representing an attribute
  * 
- * @author khotyn 2011-11-17 ÏÂÎç5:17:13
+ * @author khotyn 2011-11-17 PM 5:17:13
  */
-public class Attribute {
+public abstract class Attribute {
+
     // Names of all predefined attributes.
-    public static final String CONSTANT_VALUE                          = "ConstantValue";
-    public static final String CODE                                    = "Code";
-    public static final String STACK_MAP_TABLE                         = "StackMapTrace";
-    public static final String EXCEPTIONS                              = "Exceptions";
-    public static final String INNER_CLASSES                           = "InnerClasses";
-    public static final String ENCLOSING_METHOD                        = "EnclosingMethod";
-    public static final String SYNTHETIC                               = "Synthetic";
-    public static final String SIGNATURE                               = "Signature";
-    public static final String SOURCE_FILE                             = "SourceFile";
-    public static final String SOURCE_DEBUG_EXTENSION                  = "SourceDebugExtension";
-    public static final String LINE_NUMBER_TABLE                       = "LineNumberTable";
-    public static final String LOCAL_VARIABLE_TABLE                    = "LocalVariableTable";
-    public static final String LOCAL_VARIABLE_TYPE_TABLE               = "LocalVariableTypeTable";
-    public static final String DEPRECATED                              = "Deprecated";
-    public static final String RUNTIME_VISIBLE_ANNOTATIONS             = "RuntimeVisibleAnnotations";
-    public static final String RUNTIME_INVISIBLE_ANNOTATIONS           = "RuntimeInvisibileAnnotations";
-    public static final String RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS   = "RuntimeVisibleParameterAnnotations";
-    public static final String RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS = "RuntimeInvisibleParameterAnnotations";
-    public static final String ANNOTAION_DEFAULT                       = "AnnotationDefault";
-    public static final String BOOTSTRAP_METHODS                       = "BootstrapMethods";
+    public static final ConstantUTF8                 CONSTANT_VALUE                          = new ConstantUTF8(
+                                                                                                                "ConstantValue");
+    public static final ConstantUTF8                 CODE                                    = new ConstantUTF8("Code");
+    public static final ConstantUTF8                 STACK_MAP_TABLE                         = new ConstantUTF8(
+                                                                                                                "StackMapTrace");
+    public static final ConstantUTF8                 EXCEPTIONS                              = new ConstantUTF8(
+                                                                                                                "Exceptions");
+    public static final ConstantUTF8                 INNER_CLASSES                           = new ConstantUTF8(
+                                                                                                                "InnerClasses");
+    public static final ConstantUTF8                 ENCLOSING_METHOD                        = new ConstantUTF8(
+                                                                                                                "EnclosingMethod");
+    public static final ConstantUTF8                 SYNTHETIC                               = new ConstantUTF8(
+                                                                                                                "Synthetic");
+    public static final ConstantUTF8                 SIGNATURE                               = new ConstantUTF8(
+                                                                                                                "Signature");
+    public static final ConstantUTF8                 SOURCE_FILE                             = new ConstantUTF8(
+                                                                                                                "SourceFile");
+    public static final ConstantUTF8                 SOURCE_DEBUG_EXTENSION                  = new ConstantUTF8(
+                                                                                                                "SourceDebugExtension");
+    public static final ConstantUTF8                 LINE_NUMBER_TABLE                       = new ConstantUTF8(
+                                                                                                                "LineNumberTable");
+    public static final ConstantUTF8                 LOCAL_VARIABLE_TABLE                    = new ConstantUTF8(
+                                                                                                                "LocalVariableTable");
+    public static final ConstantUTF8                 LOCAL_VARIABLE_TYPE_TABLE               = new ConstantUTF8(
+                                                                                                                "LocalVariableTypeTable");
+    public static final ConstantUTF8                 DEPRECATED                              = new ConstantUTF8(
+                                                                                                                "Deprecated");
+    public static final ConstantUTF8                 RUNTIME_VISIBLE_ANNOTATIONS             = new ConstantUTF8(
+                                                                                                                "RuntimeVisibleAnnotations");
+    public static final ConstantUTF8                 RUNTIME_INVISIBLE_ANNOTATIONS           = new ConstantUTF8(
+                                                                                                                "RuntimeInvisibileAnnotations");
+    public static final ConstantUTF8                 RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS   = new ConstantUTF8(
+                                                                                                                "RuntimeVisibleParameterAnnotations");
+    public static final ConstantUTF8                 RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS = new ConstantUTF8(
+                                                                                                                "RuntimeInvisibleParameterAnnotations");
+    public static final ConstantUTF8                 ANNOTAION_DEFAULT                       = new ConstantUTF8(
+                                                                                                                "AnnotationDefault");
+    public static final ConstantUTF8                 BOOTSTRAP_METHODS                       = new ConstantUTF8(
+                                                                                                                "BootstrapMethods");
 
-    protected String           name;
-    protected int              length;
+    // The map of the attribute and the corresponding attribute parser.
+    public static Map<ConstantUTF8, AttributeParser> parsers                                 = new HashMap<ConstantUTF8, AttributeParser>();
 
-    public String getName() {
-        return name;
+    static {
+        parsers.put(SOURCE_FILE, new SourceFileParser());
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    protected static ConstantUTF8                    name;
+    protected int                                    length;
 
     public int getLength() {
         return length;

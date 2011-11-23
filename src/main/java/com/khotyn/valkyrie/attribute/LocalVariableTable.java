@@ -2,6 +2,8 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * TODO: LocalVariableTable.java
  * 
@@ -9,7 +11,7 @@ import java.util.List;
  */
 public class LocalVariableTable extends Attribute {
 
-    protected String            name = LOCAL_VARIABLE_TABLE;
+    public static ConstantUTF8  name = LOCAL_VARIABLE_TABLE;
 
     private List<LocalVariable> localVariableTable;
 

@@ -12,20 +12,22 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * TODO Comment of Code
  * 
  * @author khotyn
- * 
  */
 public class Code extends Attribute {
-    protected String        name = CODE;
-    private int             maxStack;
-    private int             maxLocals;
-    private int             codeLength;
-    private String          code;
-    private List<Exception> exceptionTable;
-    private List<Attribute> attributes;
+
+    public static ConstantUTF8 name = CODE;
+    private int                maxStack;
+    private int                maxLocals;
+    private int                codeLength;
+    private String             code;
+    private List<Exception>    exceptionTable;
+    private List<Attribute>    attributes;
 
     public int getMaxStack() {
         return maxStack;

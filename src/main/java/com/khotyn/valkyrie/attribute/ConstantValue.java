@@ -10,17 +10,18 @@
  */
 package com.khotyn.valkyrie.attribute;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * Attribute ConstantValue
  * 
  * @author khotyn
- * 
  */
 public class ConstantValue extends Attribute {
 
-    protected String name   = CONSTANT_VALUE;
-    protected int    length = 2;
-    private int      index;
+    public static ConstantUTF8 name   = CONSTANT_VALUE;
+    protected int              length = 2;
+    private int                index;
 
     public int getIndex() {
         return index;

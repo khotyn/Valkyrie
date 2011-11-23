@@ -12,15 +12,17 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * The attribute InnerClasses
  * 
  * @author khotyn
- * 
  */
 public class InnerClasses extends Attribute {
-    protected String         name = INNER_CLASSES;
-    private List<InnerClass> innerClasses;
+
+    public static ConstantUTF8 name = INNER_CLASSES;
+    private List<InnerClass>   innerClasses;
 
     public List<InnerClass> getInnerClasses() {
         return innerClasses;

@@ -1,9 +1,11 @@
 package com.khotyn.valkyrie.attribute;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 public class AnnotationDefault extends Attribute {
 
-    protected String     name = ANNOTAION_DEFAULT;
-    private ElementValue defaultValue;
+    public static ConstantUTF8 name = ANNOTAION_DEFAULT;
+    private ElementValue       defaultValue;
 
     public ElementValue getDefaultValue() {
         return defaultValue;

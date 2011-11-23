@@ -1,5 +1,7 @@
 package com.khotyn.valkyrie.attribute;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * TODO: Deprecated.java
  * 
@@ -7,6 +9,6 @@ package com.khotyn.valkyrie.attribute;
  */
 public class Deprecated extends Attribute {
 
-    protected String name   = DEPRECATED;
-    protected int    length = 0;
+    public static ConstantUTF8 name   = DEPRECATED;
+    protected int              length = 0;
 }

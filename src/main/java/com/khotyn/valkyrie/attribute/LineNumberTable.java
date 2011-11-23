@@ -2,6 +2,8 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * Attribute LineNumberTable
  * 
@@ -9,8 +11,8 @@ import java.util.List;
  */
 public class LineNumberTable extends Attribute {
 
-    protected String         name = LINE_NUMBER_TABLE;
-    private List<LineNumber> lineNumberTable;
+    public static ConstantUTF8 name = LINE_NUMBER_TABLE;
+    private List<LineNumber>   lineNumberTable;
 
     public List<LineNumber> getLineNumberTable() {
         return lineNumberTable;

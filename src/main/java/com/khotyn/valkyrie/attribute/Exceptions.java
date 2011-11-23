@@ -13,15 +13,16 @@ package com.khotyn.valkyrie.attribute;
 import java.util.List;
 
 import com.khotyn.valkyrie.constant.ConstantClass;
+import com.khotyn.valkyrie.constant.ConstantUTF8;
 
 /**
  * TODO Comment of Exceptions
  * 
  * @author khotyn
- * 
  */
 public class Exceptions extends Attribute {
-    protected String            name = EXCEPTIONS;
+
+    public static ConstantUTF8  name = EXCEPTIONS;
     private List<ConstantClass> exceptionIndexTable;
 
     public List<ConstantClass> getExceptionIndexTable() {

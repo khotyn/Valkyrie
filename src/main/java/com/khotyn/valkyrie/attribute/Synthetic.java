@@ -10,14 +10,16 @@
  */
 package com.khotyn.valkyrie.attribute;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * Attribute Synthetic
  * 
  * @author khotyn
- * 
  */
 public class Synthetic extends Attribute {
-    protected String name   = SYNTHETIC;
-    protected int    length = 0;
+
+    public static ConstantUTF8 name   = SYNTHETIC;
+    protected int              length = 0;
 
 }

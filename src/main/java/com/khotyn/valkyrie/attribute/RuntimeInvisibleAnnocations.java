@@ -2,11 +2,13 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 public class RuntimeInvisibleAnnocations extends Attribute {
 
-    protected String         name = RUNTIME_INVISIBLE_ANNOTATIONS;
+    public static ConstantUTF8 name = RUNTIME_INVISIBLE_ANNOTATIONS;
 
-    private List<Annotation> annotations;
+    private List<Annotation>   annotations;
 
     public List<Annotation> getAnnotations() {
         return annotations;

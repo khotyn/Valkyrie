@@ -2,6 +2,8 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * TODO: RuntimeVisibleAnnotation.java
  * 
@@ -9,8 +11,8 @@ import java.util.List;
  */
 public class RuntimeVisibleAnnotation extends Attribute {
 
-    protected String         name = RUNTIME_VISIBLE_ANNOTATIONS;
-    private List<Annotation> annotations;
+    public static ConstantUTF8 name = RUNTIME_VISIBLE_ANNOTATIONS;
+    private List<Annotation>   annotations;
 
     public List<Annotation> getAnnotations() {
         return annotations;

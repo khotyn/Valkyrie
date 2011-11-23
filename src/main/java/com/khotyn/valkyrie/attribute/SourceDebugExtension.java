@@ -12,15 +12,17 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * {@link Attribute} SourceDebugExtension
  * 
  * @author khotyn
- * 
  */
 public class SourceDebugExtension extends Attribute {
-    protected String     name = SOURCE_DEBUG_EXTENSION;
-    private List<String> debugExtension;
+
+    public static ConstantUTF8 name = SOURCE_DEBUG_EXTENSION;
+    private List<String>       debugExtension;
 
     public List<String> getDebugExtension() {
         return debugExtension;

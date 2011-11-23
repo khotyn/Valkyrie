@@ -10,16 +10,18 @@
  */
 package com.khotyn.valkyrie.attribute;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * Attribute Signature
  * 
  * @author khotyn
- * 
  */
 public class Signature extends Attribute {
-    protected String name   = SIGNATURE;
-    protected int    length = 2;
-    private int      signatureIndex;
+
+    public static ConstantUTF8 name   = SIGNATURE;
+    protected int              length = 2;
+    private int                signatureIndex;
 
     public int getSignatureIndex() {
         return signatureIndex;

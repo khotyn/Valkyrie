@@ -12,14 +12,16 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * TODO Comment of StackMapTable
  * 
  * @author khotyn
- * 
  */
 public class StackMapTable extends Attribute {
-    protected String            name = STACK_MAP_TABLE;
+
+    public static ConstantUTF8  name = STACK_MAP_TABLE;
     private List<StackMapFrame> entries;
 
     public List<StackMapFrame> getEntries() {

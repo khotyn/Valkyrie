@@ -10,16 +10,18 @@
  */
 package com.khotyn.valkyrie.attribute;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * Attribute SourceFile
  * 
  * @author khotyn
- * 
  */
 public class SourceFile extends Attribute {
-    protected String name   = SOURCE_FILE;
-    protected int    length = 4;
-    private int      sourcefileIndex;
+
+    public static ConstantUTF8 name   = SOURCE_FILE;
+    protected int              length = 4;
+    private int                sourcefileIndex;
 
     public int getSourcefileIndex() {
         return sourcefileIndex;

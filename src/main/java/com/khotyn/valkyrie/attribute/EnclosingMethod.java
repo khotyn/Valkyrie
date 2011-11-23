@@ -10,18 +10,20 @@
  */
 package com.khotyn.valkyrie.attribute;
 
+import com.khotyn.valkyrie.constant.ConstantUTF8;
+
 /**
  * Attribute EnclosingMethod
  * 
  * @author khotyn
- * 
  */
 public class EnclosingMethod extends Attribute {
-    protected String name   = ENCLOSING_METHOD;
-    protected int    length = 4;
 
-    private int      classIndex;
-    private int      methodIndex;
+    public static ConstantUTF8 name   = ENCLOSING_METHOD;
+    protected int              length = 4;
+
+    private int                classIndex;
+    private int                methodIndex;
 
     public int getClassIndex() {
         return classIndex;
