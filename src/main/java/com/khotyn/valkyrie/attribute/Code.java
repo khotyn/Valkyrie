@@ -24,7 +24,6 @@ public class Code extends Attribute {
     public static ConstantUTF8 name = CODE;
     private int                maxStack;
     private int                maxLocals;
-    private int                codeLength;
     private String             code;
     private List<Exception>    exceptionTable;
     private List<Attribute>    attributes;
@@ -43,14 +42,6 @@ public class Code extends Attribute {
 
     public void setMaxLocals(int maxLocals) {
         this.maxLocals = maxLocals;
-    }
-
-    public int getCodeLength() {
-        return codeLength;
-    }
-
-    public void setCodeLength(int codeLength) {
-        this.codeLength = codeLength;
     }
 
     public String getCode() {

@@ -21,13 +21,14 @@ public class ConstantValue extends Attribute {
 
     public static ConstantUTF8 name   = CONSTANT_VALUE;
     protected int              length = 2;
-    private int                index;
+    private int                constantValueIndex;
 
-    public int getIndex() {
-        return index;
+    public int getConstantValueIndex() {
+        return constantValueIndex;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setConstantValueIndex(int constantValueIndex) {
+        this.constantValueIndex = constantValueIndex;
     }
+
 }
