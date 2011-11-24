@@ -16,7 +16,7 @@ public class SyntheticParser extends AttributeParser {
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         return new Synthetic();
     }
 

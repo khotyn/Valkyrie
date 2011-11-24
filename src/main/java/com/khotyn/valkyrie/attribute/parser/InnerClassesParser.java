@@ -39,21 +39,20 @@ public class InnerClassesParser extends AttributeParser {
      * @see com.khotyn.valkyrie.attribute.parser.AttributeParser#parse(java.lang.String)
      */
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         InnerClasses result = new InnerClasses();
-        int cursor = 0;
-        result.setLength(str.length() / 2);
-        int numberOfClass = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+        result.setLength(getCursor().u4());
+        int numberOfClass = getCursor().u2();
         List<InnerClass> innerClasses = new ArrayList<InnerClass>();
 
         for (int i = 0; i < numberOfClass; i++) {
             InnerClass innerClass = new InnerClass();
-            innerClass.setInnerClassInfo(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-            innerClass.setOuterClassInfo(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-            innerClass.setInnerName(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
+            innerClass.setInnerClassInfo(getCursor().u2());
+            innerClass.setOuterClassInfo(getCursor().u2());
+            innerClass.setInnerName(getCursor().u2());
 
             List<AccessFlags> accFlags = new ArrayList<AccessFlags>();
-            int accessFlags = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+            int accessFlags = getCursor().u2();
             for (AccessFlags accFlag : AccessFlags.values()) {
                 if ((accessFlags & accFlag.flag) == accFlag.flag) {
                     accFlags.add(accFlag);

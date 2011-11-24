@@ -34,20 +34,19 @@ public class LocalVariableTypeTableParser extends AttributeParser {
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         LocalVariableTypeTable result = new LocalVariableTypeTable();
-        result.setLength(str.length() / 2);
-        int cursor = 0;
-        int tableLength = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+        result.setLength(getCursor().u4());
+        int tableLength = getCursor().u2();
         List<LocalVariableType> localVariableTypes = new ArrayList<LocalVariableType>(tableLength);
 
         for (int i = 0; i < tableLength; i++) {
             LocalVariableType localVariableType = new LocalVariableType();
-            localVariableType.setStartPC(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-            localVariableType.setLength(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-            localVariableType.setNameIndex(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-            localVariableType.setSignatureIndex(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-            localVariableType.setIndex(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
+            localVariableType.setStartPC(getCursor().u2());
+            localVariableType.setLength(getCursor().u2());
+            localVariableType.setNameIndex(getCursor().u2());
+            localVariableType.setSignatureIndex(getCursor().u2());
+            localVariableType.setIndex(getCursor().u2());
             localVariableTypes.add(localVariableType);
         }
 

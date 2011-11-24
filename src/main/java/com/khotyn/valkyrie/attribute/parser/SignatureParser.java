@@ -34,9 +34,9 @@ public class SignatureParser extends AttributeParser {
      * @see com.khotyn.valkyrie.attribute.parser.AttributeParser#parse(java.lang.String)
      */
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         Signature result = new Signature();
-        result.setSignatureIndex(Integer.parseInt(str.substring(0, Clazz.U2), 16));
+        result.setSignatureIndex(getCursor().u2());
         return result;
     }
 }

@@ -31,10 +31,11 @@ public class SourceDebugExtensionParser extends AttributeParser {
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         SourceDebugExtension result = new SourceDebugExtension();
-        result.setLength(str.length() / 2);
-        result.setDebugExtension(ValkyrieUtil.hexStringToASCIIString(str));
+        int length = getCursor().u4();
+        result.setLength(length);
+        result.setDebugExtension(ValkyrieUtil.hexStringToASCIIString(getCursor().getSubStr(length * 2)));
         return result;
     }
 }

@@ -10,20 +10,18 @@
  */
 package com.khotyn.valkyrie.parser;
 
+import com.khotyn.valkyrie.Cursor;
+
 /**
  * The inteface of parser
  * 
  * @author khotyn
  * 
  */
-public interface Parser {
-    public int getCursor();
+public interface Parser<T> {
+    public Cursor getCursor();
 
-    public void setCursor(int cursor);
+    public void setCursor(Cursor cursor);
 
-    public String getBytecodeString();
-
-    public void setBytecodeString(String bytecodeString);
-
-    public void reset();
+    public T parse() throws Exception;
 }

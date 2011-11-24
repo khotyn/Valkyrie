@@ -11,12 +11,12 @@ import com.khotyn.valkyrie.attribute.Deprecated;
  */
 public class DeprecatedParser extends AttributeParser {
 
-    public DeprecatedParser(Clazz clazz){
+    public DeprecatedParser(Clazz clazz) {
         super(clazz);
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         return new Deprecated();
     }
 

@@ -16,14 +16,17 @@ public class ClazzTest {
 
     @Test
     public void testReadClass() {
-        ClassParser classParser = ClassParser.getInstance();
+
         try {
-            Clazz clazz = classParser.parse(FileUtils.readFileToByteArray(new File("/Users/apple/Desktop/Main.class")));
+            ClassParser classParser = new ClassParser(FileUtils.readFileToByteArray(new File("/Users/apple/Desktop/Main.class")));
+            Clazz clazz = classParser.parse();
             System.out.println(clazz.toString());
         } catch (IOException e) {
-            e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (IllegalClassException e) {
-            e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

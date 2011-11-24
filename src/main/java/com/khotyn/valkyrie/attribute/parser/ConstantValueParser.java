@@ -11,15 +11,15 @@ import com.khotyn.valkyrie.attribute.ConstantValue;
  */
 public class ConstantValueParser extends AttributeParser {
 
-    public ConstantValueParser(Clazz clazz){
+    public ConstantValueParser(Clazz clazz) {
         super(clazz);
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         ConstantValue constantValue = new ConstantValue();
-        constantValue.setLength(str.length() / 2);
-        constantValue.setConstantValueIndex(Integer.parseInt(str, 16));
+        constantValue.setLength(getCursor().u4());
+        constantValue.setConstantValueIndex(getCursor().u2());
         return constantValue;
     }
 }

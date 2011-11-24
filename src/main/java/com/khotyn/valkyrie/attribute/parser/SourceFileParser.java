@@ -16,10 +16,10 @@ public class SourceFileParser extends AttributeParser {
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         SourceFile result = new SourceFile();
-        result.setLength(str.length() / 2);
-        result.setSourcefileIndex(Integer.parseInt(str.substring(0, Clazz.U2), 16));
+        result.setLength(getCursor().u4());
+        result.setSourcefileIndex(getCursor().u2());
         return result;
     }
 }

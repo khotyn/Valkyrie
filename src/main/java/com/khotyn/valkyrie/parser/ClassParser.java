@@ -9,6 +9,7 @@ import com.khotyn.valkyrie.AccessFlags;
 import com.khotyn.valkyrie.BytecodeBehavior;
 import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.ConstantPoolInfo;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.Field;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.parser.AttributeParser;
@@ -33,31 +34,19 @@ import com.khotyn.valkyrie.util.ValkyrieUtil;
 /**
  * User: khotyn Date: 11-11-18 Time: AM12:20 Dust to dust, earth to earth.
  */
-public class ClassParser implements Parser {
+public class ClassParser implements Parser<Clazz> {
 
-    private static ClassParser                classParser = new ClassParser();
-    private int                               cursor      = 0;                                           // The cursor
-                                                                                                          // of the
-                                                                                                          // reader in
-                                                                                                          // the byte
-                                                                                                          // code.
-    private Clazz                             clazz       = null;
-    private String                            bytecodeString;
+    private Cursor                            cursor;
+    private Clazz                             clazz;
     // The map of the attribute and the corresponding attribute parser.
-    public Map<ConstantUTF8, AttributeParser> parsers     = new HashMap<ConstantUTF8, AttributeParser>();
+    public Map<ConstantUTF8, AttributeParser> parsers = new HashMap<ConstantUTF8, AttributeParser>();
 
     {
         parsers.put(Attribute.SOURCE_FILE, new SourceFileParser(clazz));
     }
 
-    /**
-     * Get an instance of ClassParser
-     * 
-     * @return An instance of ClassParser
-     */
-    public static ClassParser getInstance() {
-        // classParser.reset();
-        return classParser;
+    public ClassParser(byte[] byteCode) {
+        cursor = new Cursor(ValkyrieUtil.byteArrayToHexString(byteCode));
     }
 
     /**
@@ -67,46 +56,45 @@ public class ClassParser implements Parser {
      * @return A Clazz representing the structure of the byte code.
      * @throws IllegalClassException Throws when che byte code is an illegal one.
      */
-    public Clazz parse(byte[] byteCode) throws IllegalClassException {
-        String byteString = ValkyrieUtil.byteArrayToHexString(byteCode);
+    public Clazz parse() throws Exception {
         clazz = new Clazz();
 
-        if (!validate(byteString)) {
+        if (!validate()) {
             throw new IllegalClassException("Invalid Magic Number");
         }
 
-        clazz.setMinorVersion(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
-        clazz.setMajorVersion(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+        clazz.setMinorVersion(cursor.u2());
+        clazz.setMajorVersion(cursor.u2());
 
-        clazz.setConstantPoolInfos(parseConstantPool(byteString));
-        clazz.setAccessFlags(parseAccessFlags(byteString));
-        clazz.setThisClass(parseThisClass(byteString));
-        clazz.setSuperClass(parseSuperClass(byteString));
-        clazz.setInterfaces(parseInterfaces(byteString));
-        clazz.setFields(parseFields(byteString));
+        clazz.setConstantPoolInfos(parseConstantPool());
+        clazz.setAccessFlags(parseAccessFlags());
+        clazz.setThisClass(parseThisClass());
+        clazz.setSuperClass(parseSuperClass());
+        clazz.setInterfaces(parseInterfaces());
+        clazz.setFields(parseFields());
         return clazz;
     }
 
-    private List<ConstantPoolInfo> parseConstantPool(String byteString) {
-        int constantPoolSize = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16) - 1;
+    private List<ConstantPoolInfo> parseConstantPool() {
+        int constantPoolSize = cursor.u2() - 1;
         List<ConstantPoolInfo> constantPoolInfoes = new ArrayList<ConstantPoolInfo>(constantPoolSize);
 
         for (int i = 0; i < constantPoolSize; i++) {
-            int tag = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U1), 16);
+            int tag = cursor.u1();
 
             switch (tag) {
             case ConstantPoolInfo.CONSTANT_UTF8:
-                int utf8Length = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                constantPoolInfoes.add(new ConstantUTF8(ValkyrieUtil.hexStringToASCIIString(byteString.substring(cursor, cursor += utf8Length * 2))));
+                int utf8Length = cursor.u2();
+                constantPoolInfoes.add(new ConstantUTF8(ValkyrieUtil.hexStringToASCIIString(cursor.getSubStr(utf8Length * 2))));
                 break;
             case ConstantPoolInfo.CONSTANT_INTEGER:
                 ConstantInteger constantInteger = new ConstantInteger();
-                constantInteger.value = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
+                constantInteger.value = cursor.u4();
                 constantPoolInfoes.add(constantInteger);
                 break;
             case ConstantPoolInfo.CONSTANT_FLOAT:
                 ConstantFloat constantFloat = new ConstantFloat();
-                int bits = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
+                int bits = cursor.u4();
                 int s = ((bits >> 31) == 0) ? 1 : -1;
                 int e = (bits >> 23) & 0xff;
                 int m = (e == 0) ? (bits & 0x7fffff) << 1 : (bits & 0x7fffff) | 0x800000;
@@ -115,14 +103,14 @@ public class ClassParser implements Parser {
                 break;
             case ConstantPoolInfo.CONSTANT_LONG:
                 ConstantLong constantLong = new ConstantLong();
-                constantLong.value = Long.parseLong(byteString.substring(cursor, cursor += (Clazz.U4 * 2)), 16);
+                constantLong.value = Long.parseLong(cursor.getSubStr(Cursor.U4 * 2), 16);
                 constantPoolInfoes.add(constantLong);
                 constantPoolInfoes.add(null);
                 i++;
                 break;
             case ConstantPoolInfo.CONSTANT_DOUBLE:
                 ConstantDouble constantDouble = new ConstantDouble();
-                long lbits = Long.parseLong(byteString.substring(cursor, cursor += (Clazz.U4 * 2)), 16);
+                long lbits = Long.parseLong(cursor.getSubStr(Cursor.U4 * 2), 16);
                 int ls = ((lbits >> 63) == 0) ? 1 : -1;
                 int le = (int) ((lbits >> 52) & 0x7ffL);
                 long lm = (le == 0) ? (lbits & 0xfffffffffffffL) << 1 : (lbits & 0xfffffffffffffL) | 0x10000000000000L;
@@ -133,54 +121,53 @@ public class ClassParser implements Parser {
                 break;
             case ConstantPoolInfo.CONSTANT_CLASS:
                 ConstantClass constantClass = new ConstantClass();
-                constantClass.nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantClass.nameIndex = cursor.u2();
                 constantPoolInfoes.add(constantClass);
                 break;
             case ConstantPoolInfo.CONSTANT_STRING:
                 ConstantString string = new ConstantString();
-                string.stringIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                string.stringIndex = cursor.u2();
                 constantPoolInfoes.add(string);
                 break;
             case ConstantPoolInfo.CONSTANT_FIELD_REF:
                 ConstantFieldRef fieldRef = new ConstantFieldRef();
-                fieldRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                fieldRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                fieldRef.classIndex = cursor.u2();
+                fieldRef.nameAndTypeIndex = cursor.u2();
                 constantPoolInfoes.add(fieldRef);
                 break;
             case ConstantPoolInfo.CONSTANT_METHOD_REF:
                 ConstantMethodRef methodRef = new ConstantMethodRef();
-                methodRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                methodRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                methodRef.classIndex = cursor.u2();
+                methodRef.nameAndTypeIndex = cursor.u2();
                 constantPoolInfoes.add(methodRef);
                 break;
             case ConstantPoolInfo.CONSTANT_INTERFACE_METHOD_REF:
                 ConstantInterfaceMethodRef constantInterfaceMethodRef = new ConstantInterfaceMethodRef();
-                constantInterfaceMethodRef.classIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                constantInterfaceMethodRef.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantInterfaceMethodRef.classIndex = cursor.u2();
+                constantInterfaceMethodRef.nameAndTypeIndex = cursor.u2();
                 constantPoolInfoes.add(constantInterfaceMethodRef);
                 break;
             case ConstantPoolInfo.CONSTANT_NAME_AND_TYPE:
                 ConstantNameAndType nameAndType = new ConstantNameAndType();
-                nameAndType.nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                nameAndType.descriptorIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                nameAndType.nameIndex = cursor.u2();
+                nameAndType.descriptorIndex = cursor.u2();
                 constantPoolInfoes.add(nameAndType);
                 break;
             case ConstantPoolInfo.CONSTANT_METHOD_HANDLE:
                 ConstantMethodHandle constantMethodHandle = new ConstantMethodHandle();
-                constantMethodHandle.referenceKind = BytecodeBehavior.getInstance(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U1),
-                        16));
-                constantMethodHandle.referenceIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantMethodHandle.referenceKind = BytecodeBehavior.getInstance(cursor.u1());
+                constantMethodHandle.referenceIndex = cursor.u2();
                 constantPoolInfoes.add(constantMethodHandle);
                 break;
             case ConstantPoolInfo.CONSTANT_METHOD_TYPE:
                 ConstantMethodType constantMethodType = new ConstantMethodType();
-                constantMethodType.descriptorIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantMethodType.descriptorIndex = cursor.u2();
                 constantPoolInfoes.add(constantMethodType);
                 break;
             case ConstantPoolInfo.CONSTANT_INVOKE_DYNAMIC:
                 ConstantInvokeDynamic constantInvokeDynamic = new ConstantInvokeDynamic();
-                constantInvokeDynamic.bootstrapMethodAttrIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
-                constantInvokeDynamic.nameAndTypeIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+                constantInvokeDynamic.bootstrapMethodAttrIndex = cursor.u2();
+                constantInvokeDynamic.nameAndTypeIndex = cursor.u2();
                 constantPoolInfoes.add(constantInvokeDynamic);
                 break;
             default:
@@ -191,9 +178,9 @@ public class ClassParser implements Parser {
         return constantPoolInfoes;
     }
 
-    private List<AccessFlags> parseAccessFlags(String byteString) {
+    private List<AccessFlags> parseAccessFlags() {
         List<AccessFlags> accFlags = new ArrayList<AccessFlags>();
-        int accessFlags = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+        int accessFlags = cursor.u2();
 
         for (AccessFlags accFlag : AccessFlags.values()) {
             if ((accessFlags & accFlag.flag) == accFlag.flag) {
@@ -204,40 +191,40 @@ public class ClassParser implements Parser {
         return accFlags;
     }
 
-    private int parseThisClass(String byteString) {
-        return Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+    private int parseThisClass() {
+        return cursor.u2();
     }
 
-    private int parseSuperClass(String byteString) {
-        return Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+    private int parseSuperClass() {
+        return cursor.u2();
     }
 
-    private List<Integer> parseInterfaces(String byteString) {
-        int size = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+    private List<Integer> parseInterfaces() {
+        int size = cursor.u2();
         List<Integer> interfaces = new ArrayList<Integer>(size);
 
         for (int i = 0; i < size; i++) {
-            interfaces.add(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+            interfaces.add(cursor.u2());
         }
 
         return interfaces;
     }
 
-    private List<Field> parseFields(String byteString) {
-        int size = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+    private List<Field> parseFields() {
+        int size = cursor.u2();
         List<Field> fields = new ArrayList<Field>();
 
         for (int i = 0; i < size; i++) {
             Field field = new Field();
-            field.setAccessFlags(parseAccessFlags(byteString));
-            field.setNameIndex(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
-            field.setDescriptorIndex(Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16));
+            field.setAccessFlags(parseAccessFlags());
+            field.setNameIndex(cursor.u2());
+            field.setDescriptorIndex(cursor.u2());
 
-            int attributesCount = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16);
+            int attributesCount = cursor.u2();
             List<Attribute> attributes = new ArrayList<Attribute>(attributesCount);
 
             for (int j = 0; j < attributesCount; j++) {
-                attributes.add(parseAttribute(byteString));
+                attributes.add(parseAttribute());
             }
 
             field.setAttributes(attributes);
@@ -246,47 +233,35 @@ public class ClassParser implements Parser {
         return fields;
     }
 
-    private Attribute parseAttribute(String byteString) {
-        int nameIndex = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U2), 16) - 1;
+    private Attribute parseAttribute() {
+        int nameIndex = cursor.u2() - 1;
         ConstantUTF8 attributeName = (ConstantUTF8) clazz.getConstantPoolInfos().get(nameIndex);
-        int attrLength = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
-
-        return parsers.get(attributeName).parse(byteString.substring(cursor, cursor += (attrLength * 2)));
+        return parsers.get(attributeName).parse();
     }
 
-    private boolean validate(String byteString) {
-        if (byteString.length() < Clazz.MAGIC_NUMBER.length()) {
+    private boolean validate() {
+        if (cursor.getByteString().length() < Clazz.MAGIC_NUMBER.length()) {
             return false;
         }
 
-        return byteString.substring(cursor, cursor += Clazz.MAGIC_NUMBER.length()).equalsIgnoreCase(Clazz.MAGIC_NUMBER);
+        return cursor.getSubStr(Clazz.MAGIC_NUMBER.length()).equalsIgnoreCase(Clazz.MAGIC_NUMBER);
     }
 
     /**
      * Reset the class parser to the initial status for reuse
      */
     public void reset() {
-        this.cursor = 0;
+        this.cursor = null;
         this.clazz = null;
     }
 
     @Override
-    public int getCursor() {
+    public Cursor getCursor() {
         return cursor;
     }
 
     @Override
-    public void setCursor(int cursor) {
+    public void setCursor(Cursor cursor) {
         this.cursor = cursor;
-    }
-
-    @Override
-    public String getBytecodeString() {
-        return bytecodeString;
-    }
-
-    @Override
-    public void setBytecodeString(String bytecodeString) {
-        this.bytecodeString = bytecodeString;
     }
 }

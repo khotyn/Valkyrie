@@ -17,35 +17,36 @@ import com.khotyn.valkyrie.parser.ClassParser;
  */
 public class CodeParser extends AttributeParser {
 
-    public CodeParser(Clazz clazz) {
+    private ExceptionTableParser exceptionTableParser = new ExceptionTableParser(getCursor());
+    private ClassParser          classParser;
+
+    public CodeParser(Clazz clazz, ClassParser classParser) {
         super(clazz);
+        this.classParser = classParser;
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         Code code = new Code();
-        int cursor = 0;
-        code.setLength(str.length() / 2);
-        code.setMaxStack(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-        code.setMaxLocals(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-        int codeLength = Integer.parseInt(str.substring(cursor, cursor += Clazz.U4), 16);
-        code.setCode(str.substring(cursor, cursor += (codeLength * 2)));
+        code.setLength(getCursor().u4());
+        code.setMaxStack(getCursor().u2());
+        code.setMaxLocals(getCursor().u2());
+        int codeLength = getCursor().u4();
+        code.setCode(getCursor().getSubStr(codeLength * 2));
 
-        int exceptionTableLength = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+        int exceptionTableLength = getCursor().u2();
         List<ExceptionTable> exceptionTables = new ArrayList<ExceptionTable>(exceptionTableLength);
         for (int i = 0; i < exceptionTableLength; i++) {
-            exceptionTables.add(ExceptionTableParser.parse(str.substring(cursor, cursor += (4 * Clazz.U2))));
+            exceptionTables.add(exceptionTableParser.parse());
         }
         code.setExceptionTable(exceptionTables);
 
-        int attributeCount = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+        int attributeCount = getCursor().u2();
         List<Attribute> attributes = new ArrayList<Attribute>(attributeCount);
         for (int i = 0; i < attributeCount; i++) {
-            int nameIndex = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16) - 1;
+            int nameIndex = getCursor().u2() - 1;
             ConstantUTF8 attributeName = (ConstantUTF8) getClazz().getConstantPoolInfos().get(nameIndex);
-            int attrLength = Integer.parseInt(str.substring(cursor, cursor += Clazz.U4), 16);
-
-            attributes.add(ClassParser.getInstance().parsers.get(attributeName).parse(str.substring(cursor, cursor += (attrLength * 2))));
+            attributes.add(classParser.parsers.get(attributeName).parse());
         }
         code.setAttributes(attributes);
 

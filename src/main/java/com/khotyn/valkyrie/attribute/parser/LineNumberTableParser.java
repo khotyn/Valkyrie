@@ -34,17 +34,16 @@ public class LineNumberTableParser extends AttributeParser {
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         LineNumberTable result = new LineNumberTable();
-        int cursor = 0;
-        result.setLength(str.length() / 2);
-        int lineNumberTableLength = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+        result.setLength(getCursor().u4());
+        int lineNumberTableLength = getCursor().u2();
         List<LineNumber> lineNumberTable = new ArrayList<LineNumber>(lineNumberTableLength);
 
         for (int i = 0; i < lineNumberTableLength; i++) {
             LineNumber lineNumber = new LineNumber();
-            lineNumber.setStartPC(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-            lineNumber.setLineNumber(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
+            lineNumber.setStartPC(getCursor().u2());
+            lineNumber.setLineNumber(getCursor().u2());
             lineNumberTable.add(lineNumber);
         }
 

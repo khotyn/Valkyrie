@@ -33,20 +33,15 @@ public class ExceptionsParser extends AttributeParser {
         super(clazz);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.khotyn.valkyrie.attribute.parser.AttributeParser#parse(java.lang.String)
-     */
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         Exceptions result = new Exceptions();
-        int cursor = 0;
-        result.setLength(str.length() / 2);
-        int numberOfExceptions = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+        result.setLength(getCursor().u4());
+        int numberOfExceptions = getCursor().u2();
         List<ConstantClass> exceptions = new ArrayList<ConstantClass>(numberOfExceptions);
 
         for (int i = 0; i < numberOfExceptions; i++) {
-            int index = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16) - 1;
+            int index = getCursor().u2() - 1;
             exceptions.add((ConstantClass) getClazz().getConstantPoolInfos().get(index));
         }
 

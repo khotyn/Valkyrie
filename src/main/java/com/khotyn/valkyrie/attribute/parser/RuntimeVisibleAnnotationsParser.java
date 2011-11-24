@@ -25,6 +25,7 @@ import com.khotyn.valkyrie.attribute.RuntimeVisibleAnnotations;
  * 
  */
 public class RuntimeVisibleAnnotationsParser extends AttributeParser {
+    private AnnotationParser annotationParser = new AnnotationParser(getCursor());
 
     /**
      * @param clazz
@@ -34,17 +35,16 @@ public class RuntimeVisibleAnnotationsParser extends AttributeParser {
     }
 
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         RuntimeVisibleAnnotations result = new RuntimeVisibleAnnotations();
-        result.setLength(str.length() / 2);
-        int cursor = 0;
-        int numberOfAnnotations = Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16);
+        result.setLength(getCursor().u4());
+        int numberOfAnnotations = getCursor().u2();
         List<Annotation> annotations = new ArrayList<Annotation>(numberOfAnnotations);
 
         for (int i = 0; i < numberOfAnnotations; i++) {
-            // annotations.add(AnnotationParser.parse())
+            annotations.add(annotationParser.parse());
         }
-
+        result.setAnnotations(annotations);
         return result;
     }
 }

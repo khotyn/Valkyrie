@@ -34,11 +34,10 @@ public class EnclosingMethodParser extends AttributeParser {
      * @see com.khotyn.valkyrie.attribute.parser.AttributeParser#parse(java.lang.String)
      */
     @Override
-    public Attribute parse(String str) {
+    public Attribute parse() {
         EnclosingMethod result = new EnclosingMethod();
-        int cursor = 0;
-        result.setClassIndex(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
-        result.setMethodIndex(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
+        result.setClassIndex(getCursor().u2());
+        result.setMethodIndex(getCursor().u2());
         return result;
     }
 
