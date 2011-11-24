@@ -25,7 +25,7 @@ public class Code extends Attribute {
     private int                maxStack;
     private int                maxLocals;
     private String             code;
-    private List<Exception>    exceptionTable;
+    private List<ExceptionTable>    exceptionTable;
     private List<Attribute>    attributes;
 
     public int getMaxStack() {
@@ -52,11 +52,11 @@ public class Code extends Attribute {
         this.code = code;
     }
 
-    public List<Exception> getExceptionTable() {
+    public List<ExceptionTable> getExceptionTable() {
         return exceptionTable;
     }
 
-    public void setExceptionTable(List<Exception> exceptionTable) {
+    public void setExceptionTable(List<ExceptionTable> exceptionTable) {
         this.exceptionTable = exceptionTable;
     }
 

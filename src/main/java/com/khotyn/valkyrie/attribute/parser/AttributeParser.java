@@ -1,5 +1,7 @@
 package com.khotyn.valkyrie.attribute.parser;
 
+import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.ClazzAware;
 import com.khotyn.valkyrie.attribute.Attribute;
 
 /**
@@ -7,7 +9,13 @@ import com.khotyn.valkyrie.attribute.Attribute;
  * 
  * @author khotyn 2011-11-23 下午3:27:28
  */
-public interface AttributeParser {
+public abstract class AttributeParser implements ClazzAware {
+
+    private Clazz clazz;
+
+    public AttributeParser(Clazz clazz){
+        this.clazz = clazz;
+    }
 
     /**
      * Parser the String into an attribute
@@ -15,5 +23,13 @@ public interface AttributeParser {
      * @param str the String to parse
      * @return the corresponding attribute
      */
-    public Attribute parse(String str);
+    public abstract Attribute parse(String str);
+
+    public Clazz getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Clazz clazz) {
+        this.clazz = clazz;
+    }
 }

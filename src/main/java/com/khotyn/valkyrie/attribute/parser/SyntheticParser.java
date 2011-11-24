@@ -1,5 +1,6 @@
 package com.khotyn.valkyrie.attribute.parser;
 
+import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.Synthetic;
 
@@ -8,7 +9,12 @@ import com.khotyn.valkyrie.attribute.Synthetic;
  * 
  * @author khotyn 2011-11-23 下午3:29:39
  */
-public class SyntheticParser implements AttributeParser {
+public class SyntheticParser extends AttributeParser {
+
+    public SyntheticParser(Clazz clazz){
+        super(clazz);
+        // TODO Auto-generated constructor stub
+    }
 
     @Override
     public Attribute parse(String str) {

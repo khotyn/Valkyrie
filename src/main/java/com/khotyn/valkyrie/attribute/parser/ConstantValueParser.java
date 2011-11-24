@@ -1,5 +1,6 @@
 package com.khotyn.valkyrie.attribute.parser;
 
+import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.ConstantValue;
 
@@ -8,7 +9,11 @@ import com.khotyn.valkyrie.attribute.ConstantValue;
  * 
  * @author khotyn 2011-11-23 下午4:52:16
  */
-public class ConstantValueParser implements AttributeParser {
+public class ConstantValueParser extends AttributeParser {
+
+    public ConstantValueParser(Clazz clazz){
+        super(clazz);
+    }
 
     @Override
     public Attribute parse(String str) {

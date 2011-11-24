@@ -1,7 +1,9 @@
 package com.khotyn.valkyrie.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.khotyn.valkyrie.AccessFlags;
 import com.khotyn.valkyrie.BytecodeBehavior;
@@ -9,6 +11,8 @@ import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.ConstantPoolInfo;
 import com.khotyn.valkyrie.Field;
 import com.khotyn.valkyrie.attribute.Attribute;
+import com.khotyn.valkyrie.attribute.parser.AttributeParser;
+import com.khotyn.valkyrie.attribute.parser.SourceFileParser;
 import com.khotyn.valkyrie.constant.ConstantClass;
 import com.khotyn.valkyrie.constant.ConstantDouble;
 import com.khotyn.valkyrie.constant.ConstantFieldRef;
@@ -31,9 +35,20 @@ import com.khotyn.valkyrie.util.ValkyrieUtil;
  */
 public class ClassParser {
 
-    private static ClassParser classParser = new ClassParser();
-    private int                cursor      = 0;                // The cursor of the reader in the byte code.
-    private Clazz              clazz       = null;
+    private static ClassParser                classParser = new ClassParser();
+    private int                               cursor      = 0;                                           // The cursor
+                                                                                                          // of the
+                                                                                                          // reader in
+                                                                                                          // the byte
+                                                                                                          // code.
+    private Clazz                             clazz       = null;
+
+    // The map of the attribute and the corresponding attribute parser.
+    public Map<ConstantUTF8, AttributeParser> parsers     = new HashMap<ConstantUTF8, AttributeParser>();
+
+    {
+        parsers.put(Attribute.SOURCE_FILE, new SourceFileParser(clazz));
+    }
 
     /**
      * Get an instance of ClassParser
@@ -249,7 +264,7 @@ public class ClassParser {
         ConstantUTF8 attributeName = (ConstantUTF8) clazz.getConstantPoolInfos().get(nameIndex);
         int attrLength = Integer.parseInt(byteString.substring(cursor, cursor += Clazz.U4), 16);
 
-        return Attribute.parsers.get(attributeName).parse(byteString.substring(cursor, cursor += (attrLength * 2)));
+        return parsers.get(attributeName).parse(byteString.substring(cursor, cursor += (attrLength * 2)));
     }
 
     private boolean validate(String byteString) {

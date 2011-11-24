@@ -15,7 +15,7 @@ package com.khotyn.valkyrie.attribute;
  * 
  * @author khotyn
  */
-public class Exception {
+public class ExceptionTable {
 
     private int startPC;
     private int endPC;
