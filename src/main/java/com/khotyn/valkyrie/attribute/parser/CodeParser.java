@@ -17,7 +17,7 @@ import com.khotyn.valkyrie.parser.ClassParser;
  */
 public class CodeParser extends AttributeParser {
 
-    public CodeParser(Clazz clazz){
+    public CodeParser(Clazz clazz) {
         super(clazz);
     }
 
@@ -25,6 +25,7 @@ public class CodeParser extends AttributeParser {
     public Attribute parse(String str) {
         Code code = new Code();
         int cursor = 0;
+        code.setLength(str.length() / 2);
         code.setMaxStack(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
         code.setMaxLocals(Integer.parseInt(str.substring(cursor, cursor += Clazz.U2), 16));
         int codeLength = Integer.parseInt(str.substring(cursor, cursor += Clazz.U4), 16);
@@ -44,8 +45,7 @@ public class CodeParser extends AttributeParser {
             ConstantUTF8 attributeName = (ConstantUTF8) getClazz().getConstantPoolInfos().get(nameIndex);
             int attrLength = Integer.parseInt(str.substring(cursor, cursor += Clazz.U4), 16);
 
-            attributes.add(ClassParser.getInstance().parsers.get(attributeName).parse(str.substring(cursor,
-                                                                                                    cursor += (attrLength * 2))));
+            attributes.add(ClassParser.getInstance().parsers.get(attributeName).parse(str.substring(cursor, cursor += (attrLength * 2))));
         }
         code.setAttributes(attributes);
 

@@ -4,23 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khotyn.valkyrie.TypeTags;
-import com.khotyn.valkyrie.constant.ConstantUTF8;
 
 public class ClassInfoElementValue extends ElementValue {
 
-    {
+    static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.CLASS);
-        this.tags = tags;
+        ClassInfoElementValue.tags = tags;
     }
 
-    private ConstantUTF8 classInfo;
+    private int classInfoIndex;
 
-    public ConstantUTF8 getClassInfo() {
-        return classInfo;
+    public int getClassInfoIndex() {
+        return classInfoIndex;
     }
 
-    public void setClassInfo(ConstantUTF8 classInfo) {
-        this.classInfo = classInfo;
+    public void setClassInfoIndex(int classInfoIndex) {
+        this.classInfoIndex = classInfoIndex;
     }
 }

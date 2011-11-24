@@ -5,7 +5,7 @@ package com.khotyn.valkyrie.attribute;
  * 
  * @author khotyn 2011-11-23 AM 10:09:46
  */
-class LineNumber {
+public class LineNumber {
 
     private int startPC;
     private int lineNumber;

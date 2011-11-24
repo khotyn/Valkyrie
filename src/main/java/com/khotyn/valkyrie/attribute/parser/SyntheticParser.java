@@ -11,9 +11,8 @@ import com.khotyn.valkyrie.attribute.Synthetic;
  */
 public class SyntheticParser extends AttributeParser {
 
-    public SyntheticParser(Clazz clazz){
+    public SyntheticParser(Clazz clazz) {
         super(clazz);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

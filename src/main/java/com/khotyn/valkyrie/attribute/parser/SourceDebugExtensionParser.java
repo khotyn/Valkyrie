@@ -1,0 +1,40 @@
+/**
+ * Project: Valkyrie
+ * 
+ * File Created at Nov 24, 2011
+ * $Id$
+ * 
+ * This is some code written by khotyn, and you are free to distribute those code for any use.
+ * Welcome to my website: http://khotyn.com
+ * Free we will be!
+ */
+package com.khotyn.valkyrie.attribute.parser;
+
+import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.attribute.Attribute;
+import com.khotyn.valkyrie.attribute.SourceDebugExtension;
+import com.khotyn.valkyrie.util.ValkyrieUtil;
+
+/**
+ * Parser to parse {@link SourceDebugExtension}
+ * 
+ * @author khotyn
+ * 
+ */
+public class SourceDebugExtensionParser extends AttributeParser {
+
+    /**
+     * @param clazz
+     */
+    public SourceDebugExtensionParser(Clazz clazz) {
+        super(clazz);
+    }
+
+    @Override
+    public Attribute parse(String str) {
+        SourceDebugExtension result = new SourceDebugExtension();
+        result.setLength(str.length() / 2);
+        result.setDebugExtension(ValkyrieUtil.hexStringToASCIIString(str));
+        return result;
+    }
+}

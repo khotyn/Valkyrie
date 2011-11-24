@@ -7,19 +7,20 @@ import com.khotyn.valkyrie.TypeTags;
 
 public class ArrayElementValue extends ElementValue {
 
-    {
+    static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.ARRAY);
-        this.tags = tags;
+        ArrayElementValue.tags = tags;
     }
 
-    private Object[] values;
+    private List<ElementValue> values;
 
-    public Object[] getValues() {
+    public List<ElementValue> getValues() {
         return values;
     }
 
-    public void setValues(Object[] values) {
+    public void setValues(List<ElementValue> values) {
         this.values = values;
     }
+
 }

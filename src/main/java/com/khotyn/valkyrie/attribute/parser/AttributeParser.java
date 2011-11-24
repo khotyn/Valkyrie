@@ -3,17 +3,20 @@ package com.khotyn.valkyrie.attribute.parser;
 import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.ClazzAware;
 import com.khotyn.valkyrie.attribute.Attribute;
+import com.khotyn.valkyrie.parser.Parser;
 
 /**
  * An attribute parser to parse attribute
  * 
  * @author khotyn 2011-11-23 下午3:27:28
  */
-public abstract class AttributeParser implements ClazzAware {
+public abstract class AttributeParser implements ClazzAware, Parser {
 
     private Clazz clazz;
+    private int   cursor;
 
-    public AttributeParser(Clazz clazz){
+    // private int
+    public AttributeParser(Clazz clazz) {
         this.clazz = clazz;
     }
 
@@ -32,4 +35,5 @@ public abstract class AttributeParser implements ClazzAware {
     public void setClazz(Clazz clazz) {
         this.clazz = clazz;
     }
+
 }

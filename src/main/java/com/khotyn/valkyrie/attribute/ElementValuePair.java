@@ -1,18 +1,16 @@
 package com.khotyn.valkyrie.attribute;
 
-import com.khotyn.valkyrie.constant.ConstantUTF8;
-
 public class ElementValuePair {
 
-    private ConstantUTF8 name;
+    private int          nameIndex;
     private ElementValue value;
 
-    public ConstantUTF8 getName() {
-        return name;
+    public int getNameIndex() {
+        return nameIndex;
     }
 
-    public void setName(ConstantUTF8 name) {
-        this.name = name;
+    public void setNameIndex(int nameIndex) {
+        this.nameIndex = nameIndex;
     }
 
     public ElementValue getValue() {

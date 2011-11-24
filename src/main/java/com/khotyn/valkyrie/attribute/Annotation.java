@@ -2,18 +2,16 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
-import com.khotyn.valkyrie.constant.ConstantUTF8;
-
 public class Annotation {
 
-    private ConstantUTF8           typeIndex;
+    private int                    typeIndex;
     private List<ElementValuePair> elementValuePairs;
 
-    public ConstantUTF8 getTypeIndex() {
+    public int getTypeIndex() {
         return typeIndex;
     }
 
-    public void setTypeIndex(ConstantUTF8 typeIndex) {
+    public void setTypeIndex(int typeIndex) {
         this.typeIndex = typeIndex;
     }
 

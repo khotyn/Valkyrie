@@ -7,18 +7,19 @@ import com.khotyn.valkyrie.attribute.SourceFile;
 /**
  * Parser to parse the {@link SourceFile} attribute
  * 
- * @author khotyn 2011-11-23 下午3:28:55
+ * @author khotyn 2011-11-23 PM3:28:55
  */
 public class SourceFileParser extends AttributeParser {
 
-    public SourceFileParser(Clazz clazz){
+    public SourceFileParser(Clazz clazz) {
         super(clazz);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public Attribute parse(String str) {
-        // TODO Auto-generated method stub
-        return null;
+        SourceFile result = new SourceFile();
+        result.setLength(str.length() / 2);
+        result.setSourcefileIndex(Integer.parseInt(str.substring(0, Clazz.U2), 16));
+        return result;
     }
 }

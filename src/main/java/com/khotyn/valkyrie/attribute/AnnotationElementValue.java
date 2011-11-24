@@ -7,10 +7,10 @@ import com.khotyn.valkyrie.TypeTags;
 
 public class AnnotationElementValue extends ElementValue {
 
-    {
+    static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.ANNOTATION);
-        this.tags = tags;
+        AnnotationElementValue.tags = tags;
     }
 
     private Annotation annotation;

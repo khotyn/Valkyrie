@@ -16,7 +16,7 @@ import com.khotyn.valkyrie.constant.ConstantClass;
 import com.khotyn.valkyrie.constant.ConstantUTF8;
 
 /**
- * TODO Comment of Exceptions
+ * Attribute {@link Exceptions}
  * 
  * @author khotyn
  */

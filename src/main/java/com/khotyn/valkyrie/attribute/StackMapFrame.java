@@ -11,9 +11,10 @@
 package com.khotyn.valkyrie.attribute;
 
 /**
- * TODO Comment of StackMapFrame
+ * Stack Map Frame
+ * 
  * @author khotyn
- *
+ * 
  */
 public class StackMapFrame {
 

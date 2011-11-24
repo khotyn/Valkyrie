@@ -4,32 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khotyn.valkyrie.TypeTags;
-import com.khotyn.valkyrie.constant.ConstantUTF8;
 
 public class EnumConstElementValue extends ElementValue {
 
-    {
+    static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.ENUM);
-        this.tags = tags;
+        EnumConstElementValue.tags = tags;
     }
 
-    private ConstantUTF8 typeName;
-    private ConstantUTF8 constName;
+    private int typeNameIndex;
+    private int constNameIndex;
 
-    public ConstantUTF8 getTypeName() {
-        return typeName;
+    public int getTypeNameIndex() {
+        return typeNameIndex;
     }
 
-    public void setTypeName(ConstantUTF8 typeName) {
-        this.typeName = typeName;
+    public void setTypeNameIndex(int typeNameIndex) {
+        this.typeNameIndex = typeNameIndex;
     }
 
-    public ConstantUTF8 getConstName() {
-        return constName;
+    public int getConstNameIndex() {
+        return constNameIndex;
     }
 
-    public void setConstName(ConstantUTF8 constName) {
-        this.constName = constName;
+    public void setConstNameIndex(int constNameIndex) {
+        this.constNameIndex = constNameIndex;
     }
+
 }

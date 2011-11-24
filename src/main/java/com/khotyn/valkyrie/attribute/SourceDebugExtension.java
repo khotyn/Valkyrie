@@ -10,8 +10,6 @@
  */
 package com.khotyn.valkyrie.attribute;
 
-import java.util.List;
-
 import com.khotyn.valkyrie.constant.ConstantUTF8;
 
 /**
@@ -22,13 +20,14 @@ import com.khotyn.valkyrie.constant.ConstantUTF8;
 public class SourceDebugExtension extends Attribute {
 
     public static ConstantUTF8 name = SOURCE_DEBUG_EXTENSION;
-    private List<String>       debugExtension;
+    private String             debugExtension;
 
-    public List<String> getDebugExtension() {
+    public String getDebugExtension() {
         return debugExtension;
     }
 
-    public void setDebugExtension(List<String> debugExtension) {
+    public void setDebugExtension(String debugExtension) {
         this.debugExtension = debugExtension;
     }
+
 }

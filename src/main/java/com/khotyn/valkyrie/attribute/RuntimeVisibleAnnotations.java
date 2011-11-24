@@ -9,7 +9,7 @@ import com.khotyn.valkyrie.constant.ConstantUTF8;
  * 
  * @author khotyn 2011-11-23 上午10:30:04
  */
-public class RuntimeVisibleAnnotation extends Attribute {
+public class RuntimeVisibleAnnotations extends Attribute {
 
     public static ConstantUTF8 name = RUNTIME_VISIBLE_ANNOTATIONS;
     private List<Annotation>   annotations;

@@ -3,12 +3,11 @@ package com.khotyn.valkyrie.attribute;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.khotyn.valkyrie.ConstantPoolInfo;
 import com.khotyn.valkyrie.TypeTags;
 
 public class ConstElementValue extends ElementValue {
 
-    {
+    static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.BYTE);
         tags.add(TypeTags.CHAR);
@@ -19,16 +18,17 @@ public class ConstElementValue extends ElementValue {
         tags.add(TypeTags.SHORT);
         tags.add(TypeTags.BOOLEAN);
         tags.add(TypeTags.STRING);
-        this.tags = tags;
+        ConstElementValue.tags = tags;
     }
 
-    private ConstantPoolInfo constValue;
+    private int constValueIndex;
 
-    public ConstantPoolInfo getConstValue() {
-        return constValue;
+    public int getConstValueIndex() {
+        return constValueIndex;
     }
 
-    public void setConstValue(ConstantPoolInfo constValue) {
-        this.constValue = constValue;
+    public void setConstValueIndex(int constValueIndex) {
+        this.constValueIndex = constValueIndex;
     }
+
 }
