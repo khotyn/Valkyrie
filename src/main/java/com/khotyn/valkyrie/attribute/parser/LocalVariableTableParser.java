@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.LocalVariable;
 import com.khotyn.valkyrie.attribute.LocalVariableTable;
@@ -28,9 +29,10 @@ public class LocalVariableTableParser extends AttributeParser {
 
     /**
      * @param clazz
+     * @param cursor
      */
-    public LocalVariableTableParser(Clazz clazz) {
-        super(clazz);
+    public LocalVariableTableParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     @Override

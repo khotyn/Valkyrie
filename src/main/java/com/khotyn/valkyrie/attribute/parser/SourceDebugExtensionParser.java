@@ -11,6 +11,7 @@
 package com.khotyn.valkyrie.attribute.parser;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.SourceDebugExtension;
 import com.khotyn.valkyrie.util.ValkyrieUtil;
@@ -25,9 +26,11 @@ public class SourceDebugExtensionParser extends AttributeParser {
 
     /**
      * @param clazz
+     * @param cursor
      */
-    public SourceDebugExtensionParser(Clazz clazz) {
-        super(clazz);
+    public SourceDebugExtensionParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
+        // TODO Auto-generated constructor stub
     }
 
     @Override

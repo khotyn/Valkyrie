@@ -1,13 +1,17 @@
 package com.khotyn.valkyrie.attribute.parser;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.StackMapTable;
 
 public class StackMapTableParser extends AttributeParser {
-
-    public StackMapTableParser(Clazz clazz) {
-        super(clazz);
+    /**
+     * @param clazz
+     * @param cursor
+     */
+    public StackMapTableParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     @Override

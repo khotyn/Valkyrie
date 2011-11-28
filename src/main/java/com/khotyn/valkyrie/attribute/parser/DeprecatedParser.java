@@ -1,6 +1,7 @@
 package com.khotyn.valkyrie.attribute.parser;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.Deprecated;
 
@@ -11,8 +12,12 @@ import com.khotyn.valkyrie.attribute.Deprecated;
  */
 public class DeprecatedParser extends AttributeParser {
 
-    public DeprecatedParser(Clazz clazz) {
-        super(clazz);
+    /**
+     * @param clazz
+     * @param cursor
+     */
+    public DeprecatedParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     @Override

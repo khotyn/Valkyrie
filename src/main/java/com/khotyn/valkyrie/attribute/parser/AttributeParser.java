@@ -13,9 +13,31 @@ import com.khotyn.valkyrie.parser.Parser;
  */
 public abstract class AttributeParser implements ClazzAware, Parser<Attribute> {
 
-    private Clazz  clazz;
+    private Clazz    clazz;
 
-    private Cursor cursor;
+    protected Cursor cursor;
+
+    // private int
+    public AttributeParser(Clazz clazz, Cursor cursor) {
+        this.clazz = clazz;
+        this.cursor = cursor;
+    }
+
+    /**
+     * Parser the String into an attribute
+     * 
+     * @param str the String to parse
+     * @return the corresponding attribute
+     */
+    public abstract Attribute parse() throws Exception;
+
+    public Clazz getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Clazz clazz) {
+        this.clazz = clazz;
+    }
 
     @Override
     public Cursor getCursor() {
@@ -25,27 +47,6 @@ public abstract class AttributeParser implements ClazzAware, Parser<Attribute> {
     @Override
     public void setCursor(Cursor cursor) {
         this.cursor = cursor;
-    }
-
-    // private int
-    public AttributeParser(Clazz clazz) {
-        this.clazz = clazz;
-    }
-
-    /**
-     * Parser the String into an attribute
-     * 
-     * @param str the String to parse
-     * @return the corresponding attribute
-     */
-    public abstract Attribute parse();
-
-    public Clazz getClazz() {
-        return clazz;
-    }
-
-    public void setClazz(Clazz clazz) {
-        this.clazz = clazz;
     }
 
 }

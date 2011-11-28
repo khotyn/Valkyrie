@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.Exceptions;
 import com.khotyn.valkyrie.constant.ConstantClass;
@@ -28,9 +29,10 @@ public class ExceptionsParser extends AttributeParser {
 
     /**
      * @param clazz
+     * @param cursor
      */
-    public ExceptionsParser(Clazz clazz) {
-        super(clazz);
+    public ExceptionsParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     @Override

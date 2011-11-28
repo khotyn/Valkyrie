@@ -11,7 +11,7 @@ public class ConstantUTF8 extends ConstantPoolInfo {
 
     private String content;
 
-    public ConstantUTF8(String content){
+    public ConstantUTF8(String content) {
         this.content = content;
     }
 
@@ -20,13 +20,28 @@ public class ConstantUTF8 extends ConstantPoolInfo {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ConstantUTF8) {
-            ConstantUTF8 constantUTF8 = (ConstantUTF8) obj;
-            return content.equals(constantUTF8.content);
-        }
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((content == null) ? 0 : content.hashCode());
+        return result;
+    }
 
-        return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ConstantUTF8 other = (ConstantUTF8) obj;
+        if (content == null) {
+            if (other.content != null)
+                return false;
+        } else if (!content.equals(other.content))
+            return false;
+        return true;
     }
 
     public String getContent() {

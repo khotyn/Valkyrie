@@ -1,6 +1,7 @@
 package com.khotyn.valkyrie.attribute.parser;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.SourceFile;
 
@@ -11,8 +12,12 @@ import com.khotyn.valkyrie.attribute.SourceFile;
  */
 public class SourceFileParser extends AttributeParser {
 
-    public SourceFileParser(Clazz clazz) {
-        super(clazz);
+    /**
+     * @param clazz
+     * @param cursor
+     */
+    public SourceFileParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     @Override

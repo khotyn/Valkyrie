@@ -11,6 +11,7 @@
 package com.khotyn.valkyrie.attribute.parser;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.EnclosingMethod;
 
@@ -24,9 +25,10 @@ public class EnclosingMethodParser extends AttributeParser {
 
     /**
      * @param clazz
+     * @param cursor
      */
-    public EnclosingMethodParser(Clazz clazz) {
-        super(clazz);
+    public EnclosingMethodParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     /*

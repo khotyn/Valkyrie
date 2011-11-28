@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.LineNumber;
 import com.khotyn.valkyrie.attribute.LineNumberTable;
@@ -28,9 +29,10 @@ public class LineNumberTableParser extends AttributeParser {
 
     /**
      * @param clazz
+     * @param cursor
      */
-    public LineNumberTableParser(Clazz clazz) {
-        super(clazz);
+    public LineNumberTableParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     @Override

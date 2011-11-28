@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.Code;
 import com.khotyn.valkyrie.attribute.ExceptionTable;
@@ -20,13 +21,13 @@ public class CodeParser extends AttributeParser {
     private ExceptionTableParser exceptionTableParser = new ExceptionTableParser(getCursor());
     private ClassParser          classParser;
 
-    public CodeParser(Clazz clazz, ClassParser classParser) {
-        super(clazz);
+    public CodeParser(Clazz clazz, Cursor cursor, ClassParser classParser) {
+        super(clazz, cursor);
         this.classParser = classParser;
     }
 
     @Override
-    public Attribute parse() {
+    public Attribute parse() throws Exception {
         Code code = new Code();
         code.setLength(getCursor().u4());
         code.setMaxStack(getCursor().u2());

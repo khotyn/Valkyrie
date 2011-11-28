@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.khotyn.valkyrie.AccessFlags;
 import com.khotyn.valkyrie.Clazz;
+import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.InnerClass;
 import com.khotyn.valkyrie.attribute.InnerClasses;
@@ -29,9 +30,10 @@ public class InnerClassesParser extends AttributeParser {
 
     /**
      * @param clazz
+     * @param cursor
      */
-    public InnerClassesParser(Clazz clazz) {
-        super(clazz);
+    public InnerClassesParser(Clazz clazz, Cursor cursor) {
+        super(clazz, cursor);
     }
 
     /*

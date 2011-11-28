@@ -2,27 +2,24 @@ package com.khotyn.valkyrie.attribute;
 
 import java.util.List;
 
-import com.khotyn.valkyrie.ConstantPoolInfo;
-import com.khotyn.valkyrie.constant.ConstantMethodHandle;
-
 public class BootstrapMethod {
 
-    private ConstantMethodHandle   methodRef;
-    private List<ConstantPoolInfo> arguments;
+    private int           methodRef;
+    private List<Integer> arguments;
 
-    public ConstantMethodHandle getMethodRef() {
+    public int getMethodRef() {
         return methodRef;
     }
 
-    public void setMethodRef(ConstantMethodHandle methodRef) {
+    public void setMethodRef(int methodRef) {
         this.methodRef = methodRef;
     }
 
-    public List<ConstantPoolInfo> getArguments() {
+    public List<Integer> getArguments() {
         return arguments;
     }
 
-    public void setArguments(List<ConstantPoolInfo> arguments) {
+    public void setArguments(List<Integer> arguments) {
         this.arguments = arguments;
     }
 }

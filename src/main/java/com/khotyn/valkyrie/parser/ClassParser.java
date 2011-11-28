@@ -11,9 +11,29 @@ import com.khotyn.valkyrie.Clazz;
 import com.khotyn.valkyrie.ConstantPoolInfo;
 import com.khotyn.valkyrie.Cursor;
 import com.khotyn.valkyrie.Field;
+import com.khotyn.valkyrie.Method;
 import com.khotyn.valkyrie.attribute.Attribute;
+import com.khotyn.valkyrie.attribute.parser.AnnotationDefaultParser;
 import com.khotyn.valkyrie.attribute.parser.AttributeParser;
+import com.khotyn.valkyrie.attribute.parser.BootstrapMethodsParser;
+import com.khotyn.valkyrie.attribute.parser.CodeParser;
+import com.khotyn.valkyrie.attribute.parser.ConstantValueParser;
+import com.khotyn.valkyrie.attribute.parser.DeprecatedParser;
+import com.khotyn.valkyrie.attribute.parser.EnclosingMethodParser;
+import com.khotyn.valkyrie.attribute.parser.ExceptionsParser;
+import com.khotyn.valkyrie.attribute.parser.InnerClassesParser;
+import com.khotyn.valkyrie.attribute.parser.LineNumberTableParser;
+import com.khotyn.valkyrie.attribute.parser.LocalVariableTableParser;
+import com.khotyn.valkyrie.attribute.parser.LocalVariableTypeTableParser;
+import com.khotyn.valkyrie.attribute.parser.RuntimeInvisibleAnnotationsParser;
+import com.khotyn.valkyrie.attribute.parser.RuntimeInvisibleParameterAnnotationsParser;
+import com.khotyn.valkyrie.attribute.parser.RuntimeVisibleAnnotationsParser;
+import com.khotyn.valkyrie.attribute.parser.RuntimeVisibleParameterAnnotationsParser;
+import com.khotyn.valkyrie.attribute.parser.SignatureParser;
+import com.khotyn.valkyrie.attribute.parser.SourceDebugExtensionParser;
 import com.khotyn.valkyrie.attribute.parser.SourceFileParser;
+import com.khotyn.valkyrie.attribute.parser.StackMapTableParser;
+import com.khotyn.valkyrie.attribute.parser.SyntheticParser;
 import com.khotyn.valkyrie.constant.ConstantClass;
 import com.khotyn.valkyrie.constant.ConstantDouble;
 import com.khotyn.valkyrie.constant.ConstantFieldRef;
@@ -38,15 +58,32 @@ public class ClassParser implements Parser<Clazz> {
 
     private Cursor                            cursor;
     private Clazz                             clazz;
-    // The map of the attribute and the corresponding attribute parser.
-    public Map<ConstantUTF8, AttributeParser> parsers = new HashMap<ConstantUTF8, AttributeParser>();
 
-    {
-        parsers.put(Attribute.SOURCE_FILE, new SourceFileParser(clazz));
-    }
+    public Map<ConstantUTF8, AttributeParser> parsers = new HashMap<ConstantUTF8, AttributeParser>();
 
     public ClassParser(byte[] byteCode) {
         cursor = new Cursor(ValkyrieUtil.byteArrayToHexString(byteCode));
+        clazz = new Clazz();
+        parsers.put(Attribute.CONSTANT_VALUE, new ConstantValueParser(clazz, cursor));
+        parsers.put(Attribute.CODE, new CodeParser(clazz, cursor, this));
+        parsers.put(Attribute.STACK_MAP_TABLE, new StackMapTableParser(clazz, cursor));
+        parsers.put(Attribute.EXCEPTIONS, new ExceptionsParser(clazz, cursor));
+        parsers.put(Attribute.INNER_CLASSES, new InnerClassesParser(clazz, cursor));
+        parsers.put(Attribute.ENCLOSING_METHOD, new EnclosingMethodParser(clazz, cursor));
+        parsers.put(Attribute.SYNTHETIC, new SyntheticParser(clazz, cursor));
+        parsers.put(Attribute.SIGNATURE, new SignatureParser(clazz, cursor));
+        parsers.put(Attribute.SOURCE_FILE, new SourceFileParser(clazz, cursor));
+        parsers.put(Attribute.SOURCE_DEBUG_EXTENSION, new SourceDebugExtensionParser(clazz, cursor));
+        parsers.put(Attribute.LINE_NUMBER_TABLE, new LineNumberTableParser(clazz, cursor));
+        parsers.put(Attribute.LOCAL_VARIABLE_TABLE, new LocalVariableTableParser(clazz, cursor));
+        parsers.put(Attribute.LOCAL_VARIABLE_TYPE_TABLE, new LocalVariableTypeTableParser(clazz, cursor));
+        parsers.put(Attribute.DEPRECATED, new DeprecatedParser(clazz, cursor));
+        parsers.put(Attribute.RUNTIME_VISIBLE_ANNOTATIONS, new RuntimeVisibleAnnotationsParser(clazz, cursor));
+        parsers.put(Attribute.RUNTIME_INVISIBLE_ANNOTATIONS, new RuntimeInvisibleAnnotationsParser(clazz, cursor));
+        parsers.put(Attribute.RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS, new RuntimeVisibleParameterAnnotationsParser(clazz, cursor));
+        parsers.put(Attribute.RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS, new RuntimeInvisibleParameterAnnotationsParser(clazz, cursor));
+        parsers.put(Attribute.ANNOTAION_DEFAULT, new AnnotationDefaultParser(clazz, cursor));
+        parsers.put(Attribute.BOOTSTRAP_METHODS, new BootstrapMethodsParser(clazz, cursor));
     }
 
     /**
@@ -57,7 +94,6 @@ public class ClassParser implements Parser<Clazz> {
      * @throws IllegalClassException Throws when che byte code is an illegal one.
      */
     public Clazz parse() throws Exception {
-        clazz = new Clazz();
 
         if (!validate()) {
             throw new IllegalClassException("Invalid Magic Number");
@@ -72,6 +108,8 @@ public class ClassParser implements Parser<Clazz> {
         clazz.setSuperClass(parseSuperClass());
         clazz.setInterfaces(parseInterfaces());
         clazz.setFields(parseFields());
+        clazz.setMethods(parseMethods());
+        // clazz.setAttributes(parseAttributes());
         return clazz;
     }
 
@@ -210,7 +248,7 @@ public class ClassParser implements Parser<Clazz> {
         return interfaces;
     }
 
-    private List<Field> parseFields() {
+    private List<Field> parseFields() throws Exception {
         int size = cursor.u2();
         List<Field> fields = new ArrayList<Field>();
 
@@ -233,9 +271,37 @@ public class ClassParser implements Parser<Clazz> {
         return fields;
     }
 
-    private Attribute parseAttribute() {
+    private List<Method> parseMethods() throws Exception {
+        int number = cursor.u2();
+        List<Method> methods = new ArrayList<Method>(number);
+
+        for (int i = 0; i < number; i++) {
+            Method method = new Method();
+            method.setAccessFlags(parseAccessFlags());
+            method.setNameIndex(getCursor().u2());
+            method.setDescriptorIndex(getCursor().u2());
+            method.setAttributes(parseAttributes());
+            methods.add(method);
+        }
+
+        return methods;
+    }
+
+    private List<Attribute> parseAttributes() throws Exception {
+        int number = getCursor().u2();
+        List<Attribute> result = new ArrayList<Attribute>(number);
+
+        for (int i = 0; i < number; i++) {
+            result.add(parseAttribute());
+        }
+
+        return result;
+    }
+
+    private Attribute parseAttribute() throws Exception {
         int nameIndex = cursor.u2() - 1;
         ConstantUTF8 attributeName = (ConstantUTF8) clazz.getConstantPoolInfos().get(nameIndex);
+        System.out.println(attributeName.toString());
         return parsers.get(attributeName).parse();
     }
 
