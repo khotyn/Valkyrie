@@ -16,13 +16,13 @@ public class SyntheticParser extends AttributeParser {
      * @param clazz
      * @param cursor
      */
-    public SyntheticParser(Clazz clazz, Cursor cursor) {
+    public SyntheticParser(Clazz clazz, Cursor cursor){
         super(clazz, cursor);
     }
 
     @Override
     public Attribute parse() {
+        getCursor().u4();
         return new Synthetic();
     }
-
 }

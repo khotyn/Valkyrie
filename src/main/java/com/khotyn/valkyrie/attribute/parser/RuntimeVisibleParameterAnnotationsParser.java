@@ -24,18 +24,17 @@ import com.khotyn.valkyrie.attribute.RuntimeVisibleParameterAnnotations;
  * Parser to parse {@link RuntimeVisibleParameterAnnotations}
  * 
  * @author khotyn
- * 
  */
 public class RuntimeVisibleParameterAnnotationsParser extends AttributeParser {
+
     private AnnotationParser annotationParser = new AnnotationParser(getCursor());
 
     /**
      * @param clazz
      * @param cursor
      */
-    public RuntimeVisibleParameterAnnotationsParser(Clazz clazz, Cursor cursor) {
+    public RuntimeVisibleParameterAnnotationsParser(Clazz clazz, Cursor cursor){
         super(clazz, cursor);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

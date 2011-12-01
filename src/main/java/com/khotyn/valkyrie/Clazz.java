@@ -1,14 +1,16 @@
 package com.khotyn.valkyrie;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.khotyn.valkyrie.attribute.Attribute;
+import com.khotyn.valkyrie.attribute.SourceFile;
+import com.khotyn.valkyrie.constant.ConstantPoolInfo;
+import com.khotyn.valkyrie.util.ValkyrieUtil;
 
 /**
  * Representing the the java byte code
  * 
- * @author khotyn 2011-11-17 ����4:45:53
+ * @author khotyn 2011-11-17 PM 4:45:53
  */
 public class Clazz {
 
@@ -19,11 +21,13 @@ public class Clazz {
     private int                    majorVersion;
     private int                    minorVersion;
     private List<ConstantPoolInfo> constantPoolInfos;
-    private List<AccessFlags>       accessFlags;
+    private List<AccessFlags>      accessFlags;
     private int                    thisClass;
     private int                    superClass;
     private List<Integer>          interfaces;
     private List<Field>            fields;
+    private List<Method>           methods;
+    private List<Attribute>        attributes;
 
     public List<Field> getFields() {
         return fields;
@@ -32,9 +36,6 @@ public class Clazz {
     public void setFields(List<Field> fields) {
         this.fields = fields;
     }
-
-    private List<Method>    methods;
-    private List<Attribute> attributes;
 
     public int getMajorVersion() {
         return majorVersion;
@@ -114,13 +115,59 @@ public class Clazz {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Magic Number:" + Clazz.MAGIC_NUMBER);
-        sb.append("\nMinor Version:" + this.minorVersion);
-        sb.append("\nMajor Version:" + this.majorVersion);
-        sb.append("\nConstant Pool(Size:" + constantPoolInfos.size() + "):" + constantPoolInfos);
-        sb.append("\nAccess Flags:" + Arrays.toString(accessFlags.toArray()));
-        sb.append("\nThis Class(#" + thisClass + "):" + constantPoolInfos.get(thisClass - 1));
-        sb.append("\nSuper Class(#" + superClass + "):" + constantPoolInfos.get(superClass - 1));
+        String sourceFileName = null;
+
+        for (int i = 0; i < attributes.size(); i++) {
+            Attribute attribute = attributes.get(i);
+            if (attribute instanceof SourceFile) {
+                sourceFileName = constantPoolInfos.get(((SourceFile) attribute).getSourcefileIndex() - 1).getString();
+                sb.append("Compiled from \"" + sourceFileName + "\"\n");
+                break;
+            }
+        }
+
+        sb.append(getClassSignature());
+        sb.append("\n  SourceFile: \"" + sourceFileName + "\"");
+        sb.append("\n  minor version: " + this.minorVersion);
+        sb.append("\n  major version: " + this.majorVersion);
+        sb.append("\n  Constant pool:");
+
+        for (int i = 0; i < constantPoolInfos.size(); i++) {
+            ConstantPoolInfo constantPoolInfo = constantPoolInfos.get(i);
+
+            if (constantPoolInfo == null) {
+                continue;
+            }
+
+            sb.append("\nConstant #" + (i + 1) + " = " + constantPoolInfo);
+        }
+        sb.append("\n{");
+
+        for (int i = 0; i < methods.size(); i++) {
+            sb.append(methods.get(i));
+        }
+        sb.append("\n}");
+        return sb.toString();
+
+    }
+
+    public String getClassSignature() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(ValkyrieUtil.accessFlagsToString(accessFlags, true));
+
+        sb.append(constantPoolInfos.get(thisClass - 1).getString() + " extends "
+                  + constantPoolInfos.get(superClass - 1).getString());
+
+        if (interfaces.size() != 0) {
+            sb.append(" implements ");
+
+            for (int i = 0; i < interfaces.size(); i++) {
+                if (i != 0) sb.append(",");
+                sb.append(constantPoolInfos.get(interfaces.get(i) - 1).getString());
+            }
+        }
+
         return sb.toString();
     }
 }

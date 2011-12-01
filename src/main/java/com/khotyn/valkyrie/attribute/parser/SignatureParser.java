@@ -19,7 +19,6 @@ import com.khotyn.valkyrie.attribute.Signature;
  * Parser to parse {@link Signature}
  * 
  * @author khotyn
- * 
  */
 public class SignatureParser extends AttributeParser {
 
@@ -27,17 +26,14 @@ public class SignatureParser extends AttributeParser {
      * @param clazz
      * @param cursor
      */
-    public SignatureParser(Clazz clazz, Cursor cursor) {
+    public SignatureParser(Clazz clazz, Cursor cursor){
         super(clazz, cursor);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.khotyn.valkyrie.attribute.parser.AttributeParser#parse(java.lang.String)
-     */
     @Override
     public Attribute parse() {
         Signature result = new Signature();
+        result.setLength(getCursor().u4());
         result.setSignatureIndex(getCursor().u2());
         return result;
     }

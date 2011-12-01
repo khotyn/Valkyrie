@@ -16,12 +16,13 @@ public class DeprecatedParser extends AttributeParser {
      * @param clazz
      * @param cursor
      */
-    public DeprecatedParser(Clazz clazz, Cursor cursor) {
+    public DeprecatedParser(Clazz clazz, Cursor cursor){
         super(clazz, cursor);
     }
 
     @Override
     public Attribute parse() {
+        getCursor().u4();
         return new Deprecated();
     }
 
