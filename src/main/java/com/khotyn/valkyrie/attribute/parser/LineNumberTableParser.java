@@ -23,7 +23,6 @@ import com.khotyn.valkyrie.attribute.LineNumberTable;
  * Parser to parse {@link LineNumberTable}
  * 
  * @author khotyn
- * 
  */
 public class LineNumberTableParser extends AttributeParser {
 
@@ -31,7 +30,7 @@ public class LineNumberTableParser extends AttributeParser {
      * @param clazz
      * @param cursor
      */
-    public LineNumberTableParser(Clazz clazz, Cursor cursor) {
+    public LineNumberTableParser(Clazz clazz, Cursor cursor){
         super(clazz, cursor);
     }
 
@@ -48,7 +47,7 @@ public class LineNumberTableParser extends AttributeParser {
             lineNumber.setLineNumber(getCursor().u2());
             lineNumberTable.add(lineNumber);
         }
-
+        result.setLineNumberTable(lineNumberTable);
         return result;
     }
 }

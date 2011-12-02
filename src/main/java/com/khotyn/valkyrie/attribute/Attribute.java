@@ -28,7 +28,7 @@ public abstract class Attribute {
     public static final ConstantUTF8 RUNTIME_VISIBLE_ANNOTATIONS             = new ConstantUTF8(
                                                                                                 "RuntimeVisibleAnnotations");
     public static final ConstantUTF8 RUNTIME_INVISIBLE_ANNOTATIONS           = new ConstantUTF8(
-                                                                                                "RuntimeInvisibileAnnotations");
+                                                                                                "RuntimeInvisibleAnnotations");
     public static final ConstantUTF8 RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS   = new ConstantUTF8(
                                                                                                 "RuntimeVisibleParameterAnnotations");
     public static final ConstantUTF8 RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS = new ConstantUTF8(

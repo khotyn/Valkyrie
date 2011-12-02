@@ -6,6 +6,8 @@ import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.Code;
 import com.khotyn.valkyrie.attribute.Deprecated;
 import com.khotyn.valkyrie.attribute.LineNumberTable;
+import com.khotyn.valkyrie.attribute.LocalVariable;
+import com.khotyn.valkyrie.attribute.LocalVariableTable;
 import com.khotyn.valkyrie.attribute.RuntimeVisibleAnnotations;
 import com.khotyn.valkyrie.util.ValkyrieUtil;
 
@@ -76,36 +78,71 @@ public class Method implements ClazzAware {
         int paramEnd = descriptor.indexOf(')');
         List<String> parameters = ValkyrieUtil.getTypes(descriptor.substring(paramStart, paramEnd));
         String returnType = ValkyrieUtil.getType(descriptor.substring(paramEnd + 1, descriptor.length()));
-        sb.append("\n" + ValkyrieUtil.accessFlagsToString(accessFlags, false) + returnType + " "
-                  + clazz.getConstantPoolInfos().get(nameIndex - 1).getString() + "(");
+        String methodName = clazz.getConstantPoolInfos().get(nameIndex - 1).getString();
 
-        for (int i = 0; i < parameters.size(); i++) {
-            if (i != 0) {
-                sb.append(", ");
+        if (!methodName.equals("<clinit>")) {
+            sb.append("\n"
+                      + ValkyrieUtil.accessFlagsToString(accessFlags, false)
+                      + (methodName.equals("<init>") ? clazz.getConstantPoolInfos().get(clazz.getThisClass() - 1).getString() : (returnType
+                                                                                                                                 + " " + methodName))
+                      + "(");
+
+            for (int i = 0; i < parameters.size(); i++) {
+                if (i != 0) {
+                    sb.append(", ");
+                }
+                sb.append(parameters.get(i));
             }
-            sb.append(parameters.get(i));
+            sb.append(");");
+        } else {
+            sb.append("\nstatic {};");
         }
-        sb.append(");\n  Code:");
+
+        sb.append("\n  Code:");
 
         for (int i = 0; i < attributes.size(); i++) {
             if (attributes.get(i) instanceof Code) {
                 Code code = (Code) attributes.get(i);
-                sb.append("\n    Stack=" + code.getMaxStack() + ", Locals=" + code.getMaxLocals() + ", Args_size="
+                sb.append("\n   Stack=" + code.getMaxStack() + ", Locals=" + code.getMaxLocals() + ", Args_size="
                           + (accessFlags.contains(AccessFlags.ACC_STATIC) ? parameters.size() : parameters.size() + 1));
-                sb.append("\n    Code=" + code.getCode());
-            }
+                sb.append("\n   Code=" + code.getCode());
 
-            if (attributes.get(i) instanceof LineNumberTable) {
-                LineNumberTable lineNumberTable = (LineNumberTable) attributes.get(i);
-                sb.append("\n  LineNumberTable:");
-                for (int j = 0; j < lineNumberTable.getLineNumberTable().size(); j++) {
-                    sb.append("\n   " + lineNumberTable.getLineNumberTable().get(j).getStartPC() + ": "
-                              + lineNumberTable.getLineNumberTable().get(j).getLineNumber());
+                for (int j = 0; j < code.getAttributes().size(); j++) {
+                    if (code.getAttributes().get(j) instanceof LineNumberTable) {
+                        LineNumberTable lineNumberTable = (LineNumberTable) code.getAttributes().get(j);
+                        sb.append("\n  LineNumberTable:");
+
+                        for (int k = 0; k < lineNumberTable.getLineNumberTable().size(); k++) {
+                            sb.append("\n   line " + lineNumberTable.getLineNumberTable().get(k).getLineNumber() + ": "
+                                      + lineNumberTable.getLineNumberTable().get(k).getStartPC());
+                        }
+                    }
+
+                    if (code.getAttributes().get(j) instanceof LocalVariableTable) {
+                        LocalVariableTable localVariableTable = (LocalVariableTable) code.getAttributes().get(j);
+                        sb.append("\n\n  LocalVariableTable:");
+                        sb.append("\n   Start\tLength\tSlot\tName\tSignature");
+
+                        for (int k = 0; k < localVariableTable.getLocalVariableTable().size(); k++) {
+                            LocalVariable localVariable = localVariableTable.getLocalVariableTable().get(k);
+
+                            sb.append("\n   "
+                                      + localVariable.getStartPC()
+                                      + "\t\t"
+                                      + localVariable.getLength()
+                                      + "\t"
+                                      + localVariable.getIndex()
+                                      + "\t"
+                                      + clazz.getConstantPoolInfos().get(localVariable.getNameIndex() - 1).getString()
+                                      + "\t"
+                                      + clazz.getConstantPoolInfos().get(localVariable.getDescriptorIndex() - 1).getString());
+                        }
+                    }
                 }
             }
 
             if (attributes.get(i) instanceof Deprecated) {
-                sb.append("\n  Deprecated: true");
+                sb.append("\n\n  Deprecated: true");
             }
 
             if (attributes.get(i) instanceof RuntimeVisibleAnnotations) {
