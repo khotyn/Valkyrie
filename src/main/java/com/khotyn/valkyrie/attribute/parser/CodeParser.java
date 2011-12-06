@@ -21,7 +21,7 @@ public class CodeParser extends AttributeParser {
     private ExceptionTableParser exceptionTableParser = new ExceptionTableParser(getCursor());
     private ClassParser          classParser;
 
-    public CodeParser(Clazz clazz, Cursor cursor, ClassParser classParser) {
+    public CodeParser(Clazz clazz, Cursor cursor, ClassParser classParser){
         super(clazz, cursor);
         this.classParser = classParser;
     }

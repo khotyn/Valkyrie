@@ -19,7 +19,6 @@ import com.khotyn.valkyrie.attribute.EnclosingMethod;
  * Parser to parse {@link EnclosingMethod}
  * 
  * @author khotyn
- * 
  */
 public class EnclosingMethodParser extends AttributeParser {
 
@@ -27,7 +26,7 @@ public class EnclosingMethodParser extends AttributeParser {
      * @param clazz
      * @param cursor
      */
-    public EnclosingMethodParser(Clazz clazz, Cursor cursor) {
+    public EnclosingMethodParser(Clazz clazz, Cursor cursor){
         super(clazz, cursor);
     }
 
@@ -38,6 +37,7 @@ public class EnclosingMethodParser extends AttributeParser {
     @Override
     public Attribute parse() {
         EnclosingMethod result = new EnclosingMethod();
+        result.setLength(getCursor().u4());
         result.setClassIndex(getCursor().u2());
         result.setMethodIndex(getCursor().u2());
         return result;

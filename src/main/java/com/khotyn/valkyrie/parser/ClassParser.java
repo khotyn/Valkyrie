@@ -253,7 +253,7 @@ public class ClassParser implements Parser<Clazz> {
 
     private List<Field> parseFields() throws Exception {
         int size = cursor.u2();
-        List<Field> fields = new ArrayList<Field>();
+        List<Field> fields = new ArrayList<Field>(size);
 
         for (int i = 0; i < size; i++) {
             Field field = new Field();
@@ -269,6 +269,7 @@ public class ClassParser implements Parser<Clazz> {
             }
 
             field.setAttributes(attributes);
+            fields.add(field);
         }
 
         return fields;

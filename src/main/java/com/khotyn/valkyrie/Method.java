@@ -2,12 +2,15 @@ package com.khotyn.valkyrie;
 
 import java.util.List;
 
+import com.khotyn.valkyrie.attribute.AnnotationDefault;
 import com.khotyn.valkyrie.attribute.Attribute;
 import com.khotyn.valkyrie.attribute.Code;
 import com.khotyn.valkyrie.attribute.Deprecated;
+import com.khotyn.valkyrie.attribute.Exceptions;
 import com.khotyn.valkyrie.attribute.LineNumberTable;
 import com.khotyn.valkyrie.attribute.LocalVariable;
 import com.khotyn.valkyrie.attribute.LocalVariableTable;
+import com.khotyn.valkyrie.attribute.RuntimeInvisibleAnnocations;
 import com.khotyn.valkyrie.attribute.RuntimeVisibleAnnotations;
 import com.khotyn.valkyrie.util.ValkyrieUtil;
 
@@ -141,6 +144,19 @@ public class Method implements ClazzAware {
                 }
             }
 
+            if (attributes.get(i) instanceof Exceptions) {
+                Exceptions exceptions = (Exceptions) attributes.get(i);
+                sb.append("\n  Exceptions:\n   throws ");
+
+                for (int j = 0; j < exceptions.getExceptionIndexTable().size(); j++) {
+                    if (j != 0) {
+                        sb.append(",");
+                    }
+
+                    sb.append(exceptions.getExceptionIndexTable().get(j).getString());
+                }
+            }
+
             if (attributes.get(i) instanceof Deprecated) {
                 sb.append("\n\n  Deprecated: true");
             }
@@ -151,6 +167,20 @@ public class Method implements ClazzAware {
                 for (int j = 0; j < runtimeVisibleAnnotations.getAnnotations().size(); j++) {
                     sb.append("\n   " + runtimeVisibleAnnotations.getAnnotations().get(j));
                 }
+            }
+
+            if (attributes.get(i) instanceof RuntimeInvisibleAnnocations) {
+                RuntimeInvisibleAnnocations runtimeInvisibleAnnotations = (RuntimeInvisibleAnnocations) attributes.get(i);
+                sb.append("\n  RuntimeInvisibleAnnocations: length = " + runtimeInvisibleAnnotations.getLength());
+                for (int j = 0; j < runtimeInvisibleAnnotations.getAnnotations().size(); j++) {
+                    sb.append("\n   " + runtimeInvisibleAnnotations.getAnnotations().get(j));
+                }
+            }
+
+            if (attributes.get(i) instanceof AnnotationDefault) {
+                AnnotationDefault annotationDefault = (AnnotationDefault) attributes.get(i);
+                sb.append("\n  AnnotationDefault: length = " + annotationDefault.getLength());
+                sb.append("\n   " + annotationDefault);
             }
         }
 

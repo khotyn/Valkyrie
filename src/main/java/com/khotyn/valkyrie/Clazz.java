@@ -128,6 +128,13 @@ public class Clazz {
 
         sb.append(getClassSignature());
         sb.append("\n  SourceFile: \"" + sourceFileName + "\"");
+
+        for (int i = 0; i < attributes.size(); i++) {
+            Attribute attribute = attributes.get(i);
+            sb.append("\n  " + attribute.getClass().getSimpleName() + ": length = " + attribute.getLength());
+            sb.append("\n   " + attribute);
+        }
+
         sb.append("\n  minor version: " + this.minorVersion);
         sb.append("\n  major version: " + this.majorVersion);
         sb.append("\n  Constant pool:");

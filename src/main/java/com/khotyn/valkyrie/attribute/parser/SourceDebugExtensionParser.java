@@ -20,7 +20,6 @@ import com.khotyn.valkyrie.util.ValkyrieUtil;
  * Parser to parse {@link SourceDebugExtension}
  * 
  * @author khotyn
- * 
  */
 public class SourceDebugExtensionParser extends AttributeParser {
 
@@ -28,9 +27,8 @@ public class SourceDebugExtensionParser extends AttributeParser {
      * @param clazz
      * @param cursor
      */
-    public SourceDebugExtensionParser(Clazz clazz, Cursor cursor) {
+    public SourceDebugExtensionParser(Clazz clazz, Cursor cursor){
         super(clazz, cursor);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

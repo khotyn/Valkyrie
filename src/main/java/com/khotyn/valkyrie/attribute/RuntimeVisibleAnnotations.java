@@ -5,8 +5,6 @@ import java.util.List;
 import com.khotyn.valkyrie.constant.ConstantUTF8;
 
 /**
- * TODO: RuntimeVisibleAnnotation.java
- * 
  * @author khotyn 2011-11-23 上午10:30:04
  */
 public class RuntimeVisibleAnnotations extends Attribute {

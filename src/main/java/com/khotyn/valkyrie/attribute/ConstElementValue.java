@@ -7,6 +7,8 @@ import com.khotyn.valkyrie.TypeTags;
 
 public class ConstElementValue extends ElementValue {
 
+    public static List<TypeTags> tags;
+
     static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.BYTE);
@@ -21,7 +23,7 @@ public class ConstElementValue extends ElementValue {
         ConstElementValue.tags = tags;
     }
 
-    private int constValueIndex;
+    private int                  constValueIndex;
 
     public int getConstValueIndex() {
         return constValueIndex;

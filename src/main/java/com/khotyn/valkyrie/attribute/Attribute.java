@@ -12,7 +12,7 @@ public abstract class Attribute {
     // Names of all predefined attributes.
     public static final ConstantUTF8 CONSTANT_VALUE                          = new ConstantUTF8("ConstantValue");
     public static final ConstantUTF8 CODE                                    = new ConstantUTF8("Code");
-    public static final ConstantUTF8 STACK_MAP_TABLE                         = new ConstantUTF8("StackMapTrace");
+    public static final ConstantUTF8 STACK_MAP_TABLE                         = new ConstantUTF8("StackMapTable");
     public static final ConstantUTF8 EXCEPTIONS                              = new ConstantUTF8("Exceptions");
     public static final ConstantUTF8 INNER_CLASSES                           = new ConstantUTF8("InnerClasses");
     public static final ConstantUTF8 ENCLOSING_METHOD                        = new ConstantUTF8("EnclosingMethod");

@@ -15,8 +15,6 @@ import java.util.List;
 import com.khotyn.valkyrie.constant.ConstantUTF8;
 
 /**
- * TODO Comment of StackMapTable
- * 
  * @author khotyn
  */
 public class StackMapTable extends Attribute {

@@ -1,8 +1,9 @@
 package com.khotyn.valkyrie;
 
+import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import com.khotyn.valkyrie.exception.IllegalClassException;
@@ -17,8 +18,14 @@ public class ClazzTest {
     public void testReadClass() {
 
         try {
-            ClassParser classParser = new ClassParser(
-                                                      IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("Main.class")));
+            File file = null;
+
+            if (System.getProperty("os.name").equals("Linux")) {
+                file = new File("/home/khotyn/Desktop/HelloWorld.class");
+            } else {
+                file = new File("");
+            }
+            ClassParser classParser = new ClassParser(FileUtils.readFileToByteArray(file));
             Clazz clazz = classParser.parse();
             System.out.println(clazz.toString());
         } catch (IOException e) {

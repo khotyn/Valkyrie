@@ -7,14 +7,15 @@ import com.khotyn.valkyrie.TypeTags;
 
 public class EnumConstElementValue extends ElementValue {
 
+    public static List<TypeTags> tags;
     static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.ENUM);
         EnumConstElementValue.tags = tags;
     }
 
-    private int typeNameIndex;
-    private int constNameIndex;
+    private int                  typeNameIndex;
+    private int                  constNameIndex;
 
     public int getTypeNameIndex() {
         return typeNameIndex;

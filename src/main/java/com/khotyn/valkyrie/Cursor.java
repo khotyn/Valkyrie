@@ -14,9 +14,9 @@ package com.khotyn.valkyrie;
  * The cursor of the bytecode
  * 
  * @author khotyn
- * 
  */
 public class Cursor {
+
     public static final int U1     = 2;
     public static final int U2     = U1 * 2;
     public static final int U4     = U2 * 2;
@@ -31,7 +31,7 @@ public class Cursor {
         this.byteString = byteString;
     }
 
-    public Cursor(String byteString) {
+    public Cursor(String byteString){
         this.byteString = byteString;
     }
 
@@ -57,7 +57,7 @@ public class Cursor {
     }
 
     public int u4() {
-        return Integer.parseInt(byteString.substring(cursor, cursor += U4), 16);
+        return Integer.valueOf(byteString.substring(cursor, cursor += U4), 16);
     }
 
     public String getSubStr(int length) {

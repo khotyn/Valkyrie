@@ -11,8 +11,6 @@
 package com.khotyn.valkyrie.attribute;
 
 /**
- * TODO Comment of Exception
- * 
  * @author khotyn
  */
 public class ExceptionTable {

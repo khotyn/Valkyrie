@@ -7,13 +7,14 @@ import com.khotyn.valkyrie.TypeTags;
 
 public class ClassInfoElementValue extends ElementValue {
 
+    public static List<TypeTags> tags;
     static {
         List<TypeTags> tags = new ArrayList<TypeTags>();
         tags.add(TypeTags.CLASS);
         ClassInfoElementValue.tags = tags;
     }
 
-    private int classInfoIndex;
+    private int                  classInfoIndex;
 
     public int getClassInfoIndex() {
         return classInfoIndex;
