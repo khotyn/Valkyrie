@@ -10,6 +10,26 @@ import com.khotyn.valkyrie.AccessFlags;
  */
 public class ValkyrieUtil {
 
+    /**
+     * Convert a hex string to an integer.
+     * 
+     * @param str
+     * @return
+     */
+    public static int hexStringToInt(String str) {
+        if (str.length() == 8) {
+            int firstBit = Integer.valueOf(str.substring(0, 1), 16);
+
+            if (firstBit >= 8) {
+                return Integer.valueOf((firstBit - 8) + str.substring(1), 16) - 0x80000000;
+            } else {
+                return Integer.valueOf(str, 16);
+            }
+        } else {
+            return Integer.valueOf(str, 16);
+        }
+    }
+
     public static String hexStringToASCIIString(String hexString) {
         StringBuffer sb = new StringBuffer(hexString.length() / 2);
 

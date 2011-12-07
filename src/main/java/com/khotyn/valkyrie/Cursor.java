@@ -10,6 +10,8 @@
  */
 package com.khotyn.valkyrie;
 
+import com.khotyn.valkyrie.util.ValkyrieUtil;
+
 /**
  * The cursor of the bytecode
  * 
@@ -49,15 +51,15 @@ public class Cursor {
     }
 
     public int u1() {
-        return Integer.parseInt(byteString.substring(cursor, cursor += U1), 16);
+        return ValkyrieUtil.hexStringToInt(byteString.substring(cursor, cursor += U1));
     }
 
     public int u2() {
-        return Integer.parseInt(byteString.substring(cursor, cursor += U2), 16);
+        return ValkyrieUtil.hexStringToInt(byteString.substring(cursor, cursor += U2));
     }
 
     public int u4() {
-        return Integer.valueOf(byteString.substring(cursor, cursor += U4), 16);
+        return ValkyrieUtil.hexStringToInt(byteString.substring(cursor, cursor += U4));
     }
 
     public String getSubStr(int length) {

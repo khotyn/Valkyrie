@@ -305,6 +305,7 @@ public class ClassParser implements Parser<Clazz> {
     private Attribute parseAttribute() throws Exception {
         int nameIndex = cursor.u2() - 1;
         ConstantUTF8 attributeName = (ConstantUTF8) clazz.getConstantPoolInfos().get(nameIndex);
+        System.out.println(attributeName.getContent());
         return parsers.get(attributeName).parse();
     }
 
